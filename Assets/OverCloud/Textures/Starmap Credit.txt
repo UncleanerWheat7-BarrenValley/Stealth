@@ -1,0 +1,3 @@
+Starmap aquired from NASA SVS Deep Star Maps:
+https://svs.gsfc.nasa.gov/cgi-bin/details.cgi?aid=3895
+Credit goes to NASA/Goddard Space Flight Center Scientific Visualization Studio

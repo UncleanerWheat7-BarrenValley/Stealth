@@ -1,0 +1,243 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: OverCloudMain
+  m_Shader: {fileID: 4800000, guid: c8003dd98bff5844abe311b57a41d0aa, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - HQ_LIGHT_SAMPLING
+  - SAMPLE_COUNT_NORMAL
+  m_InvalidKeywords:
+  - AMBIENT_GRADIENT
+  - CUSTOM_AMBIENT
+  - OVERCLOUD_ATMOSPHERE_ENABLED
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CloudNoiseTex:
+        m_Texture: {fileID: 2800000, guid: b7fa43e257dc4ae46ad409fc73b5c96f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DensityLUT:
+        m_Texture: {fileID: 2800000, guid: 9f29a5f52a78a544da3e090f626d2772, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LightMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 6c803cd3e0996c6408f074f945e57721, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: b7fa43e257dc4ae46ad409fc73b5c96f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTex:
+        m_Texture: {fileID: 2800000, guid: ed2b71f46f42c91409a049adab5ada7f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PhaseLUT:
+        m_Texture: {fileID: 2800000, guid: 0eac8340388cd634db20a6714e8ed980, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _3DNoise0: 0.15
+    - _3DNoise1: 0.242
+    - _3DNoise2: 0.286
+    - _3DNoise3: 0.648
+    - _3DNoiseIntensity: 0.307
+    - _3DNoiseIntensity2: 0.112
+    - _3DNoiseSize: 0.00035
+    - _3DNoiseSize2: 0.00152
+    - _AOScale: 2.96
+    - _Absorption: 1
+    - _AlphaAttenuation: 1
+    - _AlphaDecay: 0
+    - _AlphaNormal: 0
+    - _Ambient: 0.75
+    - _AmbientBellyDarken: 0
+    - _AmbientDensity: 1
+    - _AmbientDesaturation: 0.5
+    - _AmbientLength: 1.88
+    - _Asymmetry: 0.443
+    - _BaseDensityIncrease: 0
+    - _Belly: 1
+    - _Billowy: 1
+    - _Bottom: 0.69
+    - _BottomA: 0.648
+    - _BottomB: 1
+    - _BottomC: 0
+    - _BottomD: 0.516
+    - _Brightness: 0
+    - _BumpScale: 1
+    - _CameraFocus: 0.000332
+    - _CanFade: 1
+    - _Cheap: 0
+    - _ClearDensity: 2
+    - _CloudHeightMax: 0
+    - _CloudHeightMin: 0
+    - _Contrast: 1
+    - _Curvature: 0.01
+    - _CustomAmbient: 1
+    - _Cutoff: 0.5
+    - _DebugOverdraw: 0
+    - _Density: 0.3
+    - _DetailNormalMapScale: 1
+    - _Direct: 1
+    - _DstBlend: 0
+    - _Eccentricity: 0.5
+    - _Eccentricity2: 0.472
+    - _EccentricityB: 0.184
+    - _EccentricityF: 0.821
+    - _EdgeSharpen: 1
+    - _EdgeSoftness: 0.186
+    - _Exposure: 1
+    - _ExtinctionColor: 1
+    - _ExtinctionColoring: 0
+    - _ExtraDistance: 1
+    - _Fade: 0
+    - _Flatness: 1
+    - _FlatnessMax: 1
+    - _FlatnessMin: 1
+    - _FlatnessNearfade: 10000
+    - _GlobalFade: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _HalfLambert: 1
+    - _HeightMax: 0
+    - _HeightMin: 0
+    - _HeightOffset: 1
+    - _IBLAmbient: 0
+    - _IBLGloss: 1
+    - _IgnoreNormals: 0.229
+    - _InScatter: 0
+    - _Indirect: 1
+    - _IndirectDensity: 0.4
+    - _IndirectMaxShadow: 1
+    - _IndirectMix: 0.46
+    - _IndirectMixDensity: 1
+    - _IndirectSoftness: 0.5
+    - _Inscatter: 1
+    - _InvFade: 0.258
+    - _LQExposure: 1
+    - _LightMapHeightAtten: 2.97
+    - _LightMapIntensity: 0
+    - _LightMapRotation: 0.201
+    - _LightMapScale: 0.228
+    - _LightPen: 0.5
+    - _LightPenMin: 0.5
+    - _LowerEdge: 0.015
+    - _Metallic: 0
+    - _Mode: 0
+    - _NoiseAmount: 0
+    - _NoisePow: 0
+    - _NoiseScale: 0.464
+    - _NoiseSize: 1
+    - _NoiseThreshold: 0.322
+    - _NoiseType: 0.5
+    - _NormalIntensity: 0
+    - _OC_CloudAltitudeMax: 0
+    - _OC_CloudAltitudeMin: 0
+    - _OC_CloudHeightMax: 0
+    - _OC_CloudHeightMin: 0
+    - _OcclusionStrength: 1
+    - _Opacity: 3.2
+    - _PLightMul: 1
+    - _Parallax: 0.02
+    - _ParticleDensity: 0.63
+    - _Passthrough: 1
+    - _PerturbSpeed: 0
+    - _PointRayLength: 0.212
+    - _Powder: 1
+    - _PowderIntensity: 0.387
+    - _PowderSize: 0.186
+    - _PrecipitationDensity: 24
+    - _PrecipitationMul: 1.5
+    - _RadiusMax: 320
+    - _RadiusMin: 10
+    - _RadiusPow: 8
+    - _RadiusProfile: 0
+    - _RadiusRandomness: 0.246
+    - _RayAlphaIntensity: 0
+    - _RayAlphaMix: 1
+    - _RayLength: 0.75
+    - _RayMinElevation: 0
+    - _Rim: 0
+    - _Shadow: 0
+    - _ShadowDensity: 613
+    - _ShadowLength: 1
+    - _Shaping: 0
+    - _SilverIntensity: 1
+    - _SilverSpread: 0.191
+    - _Simple: 0.193
+    - _SimpleMax: 0
+    - _SimpleMin: 0
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _Sundisc: 1
+    - _Thickness: 1
+    - _Timescale: 0.02
+    - _UVSec: 0
+    - _UpperEdge: 0.25
+    - _ZWrite: 1
+    m_Colors:
+    - _Albedo: {r: 1, g: 1, b: 1, a: 1}
+    - _BottomColor: {r: 0.75, g: 0.9068964, b: 1, a: 1}
+    - _Color: {r: 0.9103774, g: 0.9429674, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ExtinctionColor: {r: 1, g: 0.6101179, b: 0, a: 0.5019608}
+    - _IndirectAlbedo: {r: 1, g: 0.9127674, b: 0.6462264, a: 1}
+    - _PrecipitationColor: {r: 0.73884314, g: 0.7614608, b: 0.769, a: 1}
+    - _TopColor: {r: 0.9338235, g: 0.9753549, b: 1, a: 1}
+  m_BuildTextureStacks: []

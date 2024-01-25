@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 471560a92eb0fd24b8a3159b3f4cf4c9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - sun: {instanceID: 0}
+  - moon: {instanceID: 0}
+  - cloudMaterial: {fileID: 2100000, guid: cc47c727d12024a4c84578d53b7a9855, type: 2}
+  - skyMaterial: {fileID: 2100000, guid: fee9411c0679fcf4580c4a0ec66a5644, type: 2}
+  - m_BlueNoiseTexture: {fileID: 2800000, guid: bf72fb8c567326a49b3dd229a392420c,
+      type: 3}
+  - m_NoiseTexture: {fileID: 2800000, guid: 4bcac39f1e54f434ca2d281aa497cbf0, type: 3}
+  - atmospherePrecomputeShader: {fileID: 7200000, guid: 46a877cda72d1754080b03d44dc444a5,
+      type: 3}
+  - starsCubemap: {fileID: 8900000, guid: a9416163c47694f4f8bc7c699da7fc0a, type: 3}
+  - cloudShadowsEdgeTex: {fileID: 2800000, guid: 88805fac86f86734dbf6f54184c405ea,
+      type: 3}
+  - rainMaskOffsetTex: {fileID: 2800000, guid: c55decd009c37f14fb34c077d95cb349, type: 3}
+  - m_RainRippleTex: {fileID: 2800000, guid: 1c6bfaed1cdb0db44ac0a9ec5f50fcad, type: 3}
+  - m_RainFlowTex: {fileID: 2800000, guid: 9304659edd4b52c4fad916ee1ef7ff24, type: 3}
+  executionOrder: -24260
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
