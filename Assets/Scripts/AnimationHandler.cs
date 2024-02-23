@@ -13,6 +13,7 @@ public class AnimationHandler : MonoBehaviour
         playerInput = GetComponentInParent<PlayerInput>();
         animator = GetComponent<Animator>();
         animMovementSpeed = Animator.StringToHash("MovementSpeed");
+        
     }
 
     private void Update()

@@ -1,18 +1,20 @@
 using UnityEngine;
 using static StateMachine;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {
 
-    StateMachine stateMachine = new StateMachine();
+    private StateMachine stateMachine = new StateMachine();
     public Light light;
     private NavMeshAgent navMeshAgent;
     public Transform playerTransform;
     public float currentMoveSpeed;
     private Vector3 point;
     private float topSpeed;
+    private FOV fov;
 
     public MyState myState;
     public enum MyState
@@ -24,14 +26,37 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        fov = GetComponent<FOV>();
         topSpeed = navMeshAgent.speed;
         UpdateCurrentState();
     }
 
     private void Update()
     {
-
-        currentMoveSpeed = navMeshAgent.velocity.magnitude / topSpeed;
+        if (fov.alertLevel < 50)
+        {
+            if (stateMachine.currentState is not IdleState)
+            {
+                print(stateMachine.currentState);
+                stateMachine.ChangeState(new IdleState(this.gameObject));
+            }
+        }
+        else if (fov.alertLevel > 50 && fov.alertLevel < 75)
+        {
+            if (stateMachine.currentState is not CautionState)
+            {
+                print(stateMachine.currentState);
+                stateMachine.ChangeState(new CautionState(this.gameObject));
+            }
+        }
+        else if (fov.alertLevel >= 75)
+        {
+            if (stateMachine.currentState is not AlertState)
+            {
+                stateMachine.ChangeState(new AlertState(this.gameObject));
+            }
+        }
+        currentMoveSpeed = navMeshAgent.velocity.magnitude / topSpeed;//for animation speed
         stateMachine.Update();
     }
 
@@ -64,7 +89,7 @@ public class Enemy : MonoBehaviour
     public void MoveToRandom()
     {
         GetComponent<NavMeshAgent>().destination = point;
-        navMeshAgent.speed = topSpeed / 2;
+
     }
 
     public bool closeEnough()
@@ -73,14 +98,25 @@ public class Enemy : MonoBehaviour
         {
             return true;
         }
-        else 
+        else
         {
-            return false; 
+            return false;
         }
     }
 
     public void MoveToPlayer()
     {
+
         navMeshAgent.destination = playerTransform.position;
+    }
+
+    internal void ChangeLightColour(Color colourValue)
+    {
+        light.color = colourValue;
+    }
+
+    internal void UpdateMoveSpeed(float multiplier)
+    {
+        navMeshAgent.speed = topSpeed * multiplier;
     }
 }
