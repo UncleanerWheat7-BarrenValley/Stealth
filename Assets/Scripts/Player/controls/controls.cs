@@ -44,6 +44,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire1"",
+                    ""type"": ""Button"",
+                    ""id"": ""1ac66449-b00c-4447-a276-97164db7124a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75a0e0ed-344c-4ba3-8218-8c117548db2b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_PlayerInput = asset.FindActionMap("PlayerInput", throwIfNotFound: true);
         m_PlayerInput_Movement = m_PlayerInput.FindAction("Movement", throwIfNotFound: true);
         m_PlayerInput_Camera = m_PlayerInput.FindAction("Camera", throwIfNotFound: true);
+        m_PlayerInput_Fire1 = m_PlayerInput.FindAction("Fire1", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,12 +206,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IPlayerInputActions> m_PlayerInputActionsCallbackInterfaces = new List<IPlayerInputActions>();
     private readonly InputAction m_PlayerInput_Movement;
     private readonly InputAction m_PlayerInput_Camera;
+    private readonly InputAction m_PlayerInput_Fire1;
     public struct PlayerInputActions
     {
         private @Controls m_Wrapper;
         public PlayerInputActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_PlayerInput_Movement;
         public InputAction @Camera => m_Wrapper.m_PlayerInput_Camera;
+        public InputAction @Fire1 => m_Wrapper.m_PlayerInput_Fire1;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -206,6 +229,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Camera.started += instance.OnCamera;
             @Camera.performed += instance.OnCamera;
             @Camera.canceled += instance.OnCamera;
+            @Fire1.started += instance.OnFire1;
+            @Fire1.performed += instance.OnFire1;
+            @Fire1.canceled += instance.OnFire1;
         }
 
         private void UnregisterCallbacks(IPlayerInputActions instance)
@@ -216,6 +242,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Camera.started -= instance.OnCamera;
             @Camera.performed -= instance.OnCamera;
             @Camera.canceled -= instance.OnCamera;
+            @Fire1.started -= instance.OnFire1;
+            @Fire1.performed -= instance.OnFire1;
+            @Fire1.canceled -= instance.OnFire1;
         }
 
         public void RemoveCallbacks(IPlayerInputActions instance)
@@ -237,5 +266,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnCamera(InputAction.CallbackContext context);
+        void OnFire1(InputAction.CallbackContext context);
     }
 }

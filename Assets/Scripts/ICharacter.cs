@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ICharacter
 {
-    float health { get; set; }
-    void Damage(float damage);
+    int Health { get; set; }
+    void Damage(int damage);
     float moveSpeed { get; set; }
 }

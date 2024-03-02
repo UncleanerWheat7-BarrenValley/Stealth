@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerInput : MonoBehaviour
     public float moveAmount;
     public float mouseX;
     public float mouseY;
+    public bool punch = false;
 
     private void OnEnable()
     {
@@ -24,6 +26,7 @@ public class PlayerInput : MonoBehaviour
             controls = new Controls();
             controls.PlayerInput.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
             controls.PlayerInput.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
+            controls.PlayerInput.Fire1.performed += inputActions => Fire1();
         }
 
         controls.Enable();
@@ -47,6 +50,12 @@ public class PlayerInput : MonoBehaviour
         horizontalInput = movementInput.x;
         verticalInput = movementInput.y;
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
+    }
+
+    private void Fire1() 
+    {
+        punch = true;
+        print("Fired");        
     }
 
     private void OnDisable()
