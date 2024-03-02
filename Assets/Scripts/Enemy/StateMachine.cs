@@ -35,12 +35,14 @@ public class StateMachine
         public void EnterState()
         {
             Debug.Log("Enter Idle state");
+            this.owner.GetComponent<Enemy>().UpdateMoveSpeed(0.3f);
             owner.GetComponent<Enemy>().ChangeLightColour(new Color(0, 0, 1, 0));
+            owner.GetComponent<Enemy>().StartPatrol();
         }
 
         public void ExecuteState()
         {
-            //Debug.Log("Execute Idle state");
+            
         }
 
         public void ExitState()
@@ -67,10 +69,10 @@ public class StateMachine
 
         public void ExecuteState()
         {
-            if (this.owner.GetComponent<Enemy>().closeEnough()) 
-            {
-                this.owner.GetComponent<Enemy>().UpdateCurrentState();
-            }
+            //if (this.owner.GetComponent<Enemy>().closeEnough()) 
+            //{
+            //    this.owner.GetComponent<Enemy>().UpdateCurrentState();
+            //}
         }
 
         public void ExitState()

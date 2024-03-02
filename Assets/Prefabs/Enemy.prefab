@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8495722598668538658}
   - component: {fileID: 21805652375653700}
   - component: {fileID: 941705123582599376}
+  - component: {fileID: 3510347599623563652}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -100,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f767168ce6e297f459b257db07eb029d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 7994240490617929047}
+  stateLight: {fileID: 7994240490617929047}
   playerTransform: {fileID: 0}
   currentMoveSpeed: 0
   myState: 0
@@ -138,12 +139,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a5faa515dbcf147b3a24179f80a01b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fovValue: 150
-  depthOfViewValue: 10
+  fovValue: 45
+  depthOfViewValue: 5
   playerMask:
     serializedVersion: 2
     m_Bits: 8
   alertLevel: 0
+--- !u!114 &3510347599623563652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4084872898782488542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6326c9139f12c074d8c04ae206a657b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolTransforms:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentWaypoint: 0
+  totalWaypointNumber: 0
+  waypointWaitTime: 1
 --- !u!1 &4398975242240878384
 GameObject:
   m_ObjectHideFlags: 0
