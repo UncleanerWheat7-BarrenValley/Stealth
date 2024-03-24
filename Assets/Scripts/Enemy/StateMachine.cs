@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class StateMachine
@@ -37,7 +38,11 @@ public class StateMachine
             Debug.Log("Enter Idle state");
             this.owner.GetComponent<Enemy>().UpdateMoveSpeed(0.3f);
             owner.GetComponent<Enemy>().ChangeLightColour(new Color(0, 0, 1, 0));
-            owner.GetComponent<Enemy>().StartPatrol();
+
+            if (owner.GetComponent<Patrol>().patrolTransforms.Length > 0) 
+            {
+                owner.GetComponent<Enemy>().StartPatrol();
+            }
         }
 
         public void ExecuteState()

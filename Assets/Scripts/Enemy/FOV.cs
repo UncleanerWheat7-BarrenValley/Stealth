@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using static UnityEditor.PlayerSettings;
 using UnityEngine.ProBuilder.Shapes;
+using static UnityEngine.GraphicsBuffer;
 
 public class FOV : MonoBehaviour
 {
@@ -58,6 +59,7 @@ public class FOV : MonoBehaviour
 
         if (distanceInRange && radiusInRange)
         {
+
             if (Physics.Linecast(transform.position, target.position, out RaycastHit hitInfo))
             {
                 print(hitInfo.transform.name);
