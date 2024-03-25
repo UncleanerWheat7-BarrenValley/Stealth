@@ -1,5 +1,3 @@
-using System;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class PlayerStateMachine
@@ -42,7 +40,6 @@ public class PlayerStateMachine
 
         public void ExecuteState()
         {
-
         }
 
         public void ExitState()
@@ -54,17 +51,20 @@ public class PlayerStateMachine
     public class WallState : IStates
     {
         GameObject owner;
+        PlayerController playerController;
+        Animator animator;
         public WallState(GameObject owner)
         {
             this.owner = owner;
-            owner.GetComponentInParent<PlayerController>().movementSpeed = 1;
-            owner.GetComponentInChildren<Animator>().SetBool("WallHug", true);
+            playerController = owner.GetComponentInParent<PlayerController>();
+            animator = owner.GetComponentInChildren<Animator>();            
         }
 
         public void EnterState()
         {
             Debug.Log("Enter Wall state");
-
+            playerController.movementSpeed = 1;
+            animator.SetBool("WallHug", true);
         }
 
         public void ExecuteState()
@@ -81,15 +81,17 @@ public class PlayerStateMachine
     public class CrouchState : IStates
     {
         GameObject owner;
+        PlayerController playerController;
         public CrouchState(GameObject owner)
         {
             this.owner = owner;
+            playerController = owner.GetComponentInParent<PlayerController>();
         }
 
         public void EnterState()
         {
             Debug.Log("Enter Idle state");
-            owner.GetComponentInParent<PlayerController>().movementSpeed = 2;
+            playerController.movementSpeed = 2;
         }
 
         public void ExecuteState()

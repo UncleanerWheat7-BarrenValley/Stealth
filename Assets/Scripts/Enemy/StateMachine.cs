@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UnityEngine;
 
 public class StateMachine
@@ -28,20 +26,23 @@ public class StateMachine
     public class IdleState : IStates
     {
         GameObject owner;
+        Enemy enemyScript;
+        Patrol patrol;
         public IdleState(GameObject owner) 
         {
             this.owner = owner;
+            enemyScript = owner.GetComponent<Enemy>();
+            patrol = owner.GetComponent<Patrol>();
         }
 
         public void EnterState()
         {
-            Debug.Log("Enter Idle state");
-            this.owner.GetComponent<Enemy>().UpdateMoveSpeed(0.3f);
-            owner.GetComponent<Enemy>().ChangeLightColour(new Color(0, 0, 1, 0));
+            enemyScript.UpdateMoveSpeed(0.3f);
+            enemyScript.ChangeLightColour(new Color(0, 0, 1, 0));
 
-            if (owner.GetComponent<Patrol>().patrolTransforms.Length > 0) 
+            if (patrol.patrolTransforms.Length > 0) 
             {
-                owner.GetComponent<Enemy>().StartPatrol();
+                enemyScript.StartPatrol();
             }
         }
 
@@ -59,25 +60,23 @@ public class StateMachine
     public class CautionState : IStates
     {
         GameObject owner;
+        Enemy enemyScript;
         public CautionState(GameObject owner)
         {
             this.owner = owner;
+            enemyScript = owner.GetComponent<Enemy>();
         }
         public void EnterState()
         {
-            Debug.Log("Enter Caution state");
-            owner.GetComponent<Enemy>().ChangeLightColour(new Color(1, 0, 1, 0));
-            this.owner.GetComponent<Enemy>().SelectRandomPoint();
-            this.owner.GetComponent<Enemy>().MoveToRandom();
-            this.owner.GetComponent<Enemy>().UpdateMoveSpeed(0.5f);
+            enemyScript.ChangeLightColour(new Color(1, 0, 1, 0));
+            enemyScript.SelectRandomPoint();
+            enemyScript.MoveToRandom();
+            enemyScript.UpdateMoveSpeed(0.5f);
         }
 
         public void ExecuteState()
         {
-            //if (this.owner.GetComponent<Enemy>().closeEnough()) 
-            //{
-            //    this.owner.GetComponent<Enemy>().UpdateCurrentState();
-            //}
+            
         }
 
         public void ExitState()
@@ -90,21 +89,21 @@ public class StateMachine
     {
 
         GameObject owner;
+        Enemy enemyScript;
         public AlertState(GameObject owner)
         {
             this.owner = owner;            
+            enemyScript = owner.GetComponent<Enemy>();
         }
         public void EnterState()
         {
-            Debug.Log("Enter Alert state");
-            owner.GetComponent<Enemy>().ChangeLightColour(new Color(1,0,0,0));
-            this.owner.GetComponent<Enemy>().UpdateMoveSpeed(1);
+            enemyScript.ChangeLightColour(new Color(1,0,0,0));
+            enemyScript.UpdateMoveSpeed(1);
         }
 
         public void ExecuteState()
         {
-            //Debug.Log("Execute Alert state");
-            this.owner.GetComponent<Enemy>().MoveToPlayer();
+            enemyScript.MoveToPlayer();
         }
 
         public void ExitState()

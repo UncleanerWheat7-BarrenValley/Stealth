@@ -1,27 +1,18 @@
-using System;
-using System.Data;
-using System.Drawing;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.HID;
 using static PlayerStateMachine;
-using static UnityEngine.GraphicsBuffer;
-
-
 
 public class PlayerController : MonoBehaviour
 {
     public MyState myState;
-    private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
+    public Rigidbody rb;
+    public GameObject model;
+    public float movementSpeed;
 
+    private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
     Transform mainCamera;
     Vector3 moveDirection;
     Vector3 normalVector;
-
-    public float movementSpeed;
-    public Rigidbody rb;
-    public GameObject model;
 
     public enum MyState
     {
@@ -40,12 +31,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float tick = Time.deltaTime;
-        ApplyInputMovement(tick);
-        HandleWallHug(tick);
+        ApplyInputMovement();
+        handlePlayerRotation(tick);
+        HandleWallHug();
         playerStateMachine.Update();
     }
-
-
 
     public void UpdateCurrentState()
     {
@@ -63,7 +53,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ApplyInputMovement(float tick)
+    private void ApplyInputMovement()
     {
         if (myState is not MyState.wall)
         {
@@ -76,33 +66,25 @@ public class PlayerController : MonoBehaviour
             Debug.DrawRay(transform.position + moveDirection * 1, transform.forward + Vector3.right * 0.5f * -1, UnityEngine.Color.red);
             if (!Physics.Raycast(transform.position + moveDirection / 3, transform.forward * -1 + Vector3.right * 0.5f, out RaycastHit hitInfo, 0.5f))
             {
-                print("HOORAH");
-                moveDirection = Vector3.zero;                
+                moveDirection = Vector3.zero;
             }
         }
 
         moveDirection.y = 0;
         moveDirection.Normalize();
-
         moveDirection *= movementSpeed;
 
         Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
         GetComponent<Rigidbody>().velocity = projectedVelocity;
-
-        handlePlayerRotation(tick);
     }
 
-    private void handlePlayerRotation(float delta)
-    {
+    private void handlePlayerRotation(float tick)
+    {        
         if (myState is MyState.wall) return;
 
-        Vector3 targetDir = Vector3.zero;
-        float moveOverride = playerInput.moveAmount;
-
-        targetDir = mainCamera.forward * playerInput.verticalInput;
-        targetDir += mainCamera.right * playerInput.horizontalInput;
-        targetDir.Normalize();
+        Vector3 targetDir = (mainCamera.forward * playerInput.verticalInput) + (mainCamera.right * playerInput.horizontalInput);        
         targetDir.y = 0;
+        targetDir.Normalize();
 
         if (targetDir == Vector3.zero)
         {
@@ -110,40 +92,37 @@ public class PlayerController : MonoBehaviour
         }
 
         Quaternion tr = Quaternion.LookRotation(targetDir);
-        Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, 15 * delta);
+        Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, 15 * tick);
 
         transform.rotation = targetRotation;
     }
 
-    public void HandleWallHug(float tick)
+    public void HandleWallHug()
     {
-        if (playerInput.wallHugFlag)
-        {
-            Debug.DrawRay(transform.localPosition, transform.forward * 1, UnityEngine.Color.red);
-
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, 1))
-            {
-                print(hitInfo.transform.name);
-
-                myState = MyState.wall;
-                UpdateCurrentState();
-                AttachToWall(hitInfo);
-
-            }
-            else 
-            {
-                if (myState is not MyState.wall) 
-                {
-                    playerInput.wallHugFlag = false;
-                }
-            }
-        }
-        else 
+        if (!playerInput.wallHugFlag)
         {
             myState = MyState.normal;
             UpdateCurrentState();
+            return;
+        }
+
+        Debug.DrawRay(transform.localPosition, transform.forward * 1, UnityEngine.Color.red);
+
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, 1))
+        {
+            myState = MyState.wall;
+            UpdateCurrentState();
+            AttachToWall(hitInfo);
+        }
+        else
+        {
+            if (myState is not MyState.wall)
+            {
+                playerInput.wallHugFlag = false;
+            }
         }
     }
+
 
     private void AttachToWall(RaycastHit hitInfo)
     {
