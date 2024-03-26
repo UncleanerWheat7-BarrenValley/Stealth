@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class AnimationHandler : MonoBehaviour
@@ -8,6 +10,7 @@ public class AnimationHandler : MonoBehaviour
     public PlayerInput playerInput;
     int animMovementSpeed;
     int animWallMovementSpeed;
+    int punch;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +18,7 @@ public class AnimationHandler : MonoBehaviour
         animator = GetComponent<Animator>();
         animMovementSpeed = Animator.StringToHash("MovementSpeed");
         animWallMovementSpeed = Animator.StringToHash("WallMovementSpeed");
+        punch = Animator.StringToHash("Punch");
 
     }
    
@@ -44,9 +48,10 @@ public class AnimationHandler : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-            print(other.GetComponent<EnemyManager>().Health);
+            Debug.LogWarning("ItHit");
+            Debug.LogWarning(other.GetComponent<EnemyManager>().Health);
             other.GetComponent<EnemyManager>().Damage(1);
-            print(other.GetComponent<EnemyManager>().Health);
+            Debug.LogWarning(other.GetComponent<EnemyManager>().Health);
         }
     }
 
