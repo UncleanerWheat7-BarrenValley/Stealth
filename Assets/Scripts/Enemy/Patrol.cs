@@ -26,5 +26,4 @@ public class Patrol : MonoBehaviour
             currentWaypoint = 0;
         }
     }
-
 }
