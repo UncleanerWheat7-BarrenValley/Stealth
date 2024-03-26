@@ -17,11 +17,37 @@ public class AnimationHandler : MonoBehaviour
         animWallMovementSpeed = Animator.StringToHash("WallMovementSpeed");
 
     }
-
+   
     private void Update()
     {       
         animator.SetFloat(animMovementSpeed, playerInput.moveAmount);
         animator.SetFloat(animWallMovementSpeed, playerInput.horizontalInput);
+
+        if (playerInput.punch)
+        {
+            Fire1();
+        }
+    }
+
+    public void Fire1()
+    {
+        animator.SetBool(punch, true);
+        playerInput.punch = false;
+    }
+
+    public void EndPunch() //animation event
+    {
+        animator.SetBool(punch, false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            print(other.GetComponent<EnemyManager>().Health);
+            other.GetComponent<EnemyManager>().Damage(1);
+            print(other.GetComponent<EnemyManager>().Health);
+        }
     }
 
 }

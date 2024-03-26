@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour, ICharacter
 {
-    private int health = 5;
-
     public float moveSpeed { get; set; } = 5;
-    float ICharacter.health { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public int Health { get; set; } = 5;
 
-    public void Damage(float damage)
+    public void Damage(int damage)
     {
-        health--;
+        Health--;
     }
 }

@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     public float moveAmount;
     public float mouseX;
     public float mouseY;
+    public bool punch = false;
 
     private void OnEnable()
     {
@@ -24,6 +25,7 @@ public class PlayerInput : MonoBehaviour
             controls.PlayerInput.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
             controls.PlayerInput.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
             controls.PlayerActions.HugWall.performed += i => eInput = i.performed;
+            controls.PlayerInput.Fire1.performed += inputActions => Fire1();
         }
 
         controls.Enable();
@@ -48,12 +50,6 @@ public class PlayerInput : MonoBehaviour
         verticalInput = movementInput.y;
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
     }
-
-    private void OnDisable()
-    {
-        controls.Disable();
-    }
-
     private void HandleEInput() 
     {        
         if (eInput) 
@@ -62,4 +58,16 @@ public class PlayerInput : MonoBehaviour
             eInput = false;
         }
     }
+
+    private void Fire1()
+    {
+        punch = true;
+        print("Fired");
+    }
+
+    private void OnDisable()
+    {
+        controls.Disable();
+    }
+
 }
