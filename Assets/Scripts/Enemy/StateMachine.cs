@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class StateMachine
 {
@@ -109,6 +110,36 @@ public class StateMachine
         public void ExitState()
         {
             Debug.Log("Exit Alert state");
+        }
+    }
+
+    public class DeadState : IStates
+    {
+
+        GameObject owner;
+        Enemy enemyScript;
+        
+        public DeadState(GameObject owner)
+        {
+            this.owner = owner;
+            enemyScript = owner.GetComponent<Enemy>();
+            
+        }
+        public void EnterState()
+        {
+            enemyScript.ChangeLightColour(new Color(0, 1, 0, 0));
+            
+            enemyScript.Dead();
+        
+        }
+
+        public void ExecuteState()
+        {
+            
+        }
+
+        public void ExitState()
+        {            
         }
     }
 }

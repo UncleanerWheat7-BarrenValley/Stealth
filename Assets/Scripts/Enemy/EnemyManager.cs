@@ -10,6 +10,11 @@ public class EnemyManager : MonoBehaviour, ICharacter
     public void Damage(int damage)
     {
         Health -= damage;
+        if(Health <= 0) 
+        {
+            GetComponent<Enemy>().SetState(Enemy.MyState.dead);
+            return;
+        }
         GetComponent<FOV>().alertLevel = 100;
     }
 }
