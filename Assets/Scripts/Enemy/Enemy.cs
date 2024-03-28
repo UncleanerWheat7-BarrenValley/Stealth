@@ -2,17 +2,21 @@ using UnityEngine;
 using static StateMachine;
 using UnityEngine.AI;
 using System.Collections;
-using System.Threading.Tasks;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {
     private StateMachine stateMachine = new StateMachine();
+    [SerializeField]
     private Patrol patrol;
+    [SerializeField]
+    private EnemyAnimationHandler enemyAnimationHandler;
+    [SerializeField]
     private NavMeshAgent navMeshAgent;
-    private Vector3 randomPoint;
+    [SerializeField]
     private FOV fov;
+
+    private Vector3 randomPoint;
     private float topSpeed;
 
     public Light stateLight;
@@ -22,20 +26,22 @@ public class Enemy : MonoBehaviour
     public MyState myState;
     public enum MyState
     {
-        idle, caution, alert
+        idle, caution, alert, dead
     }
 
     void Start()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        patrol = GetComponent<Patrol>();
-        fov = GetComponent<FOV>();
         topSpeed = navMeshAgent.speed;
-        UpdateCurrentState();
+        SetState(myState);
     }
 
     private void Update()
     {
+        if (stateMachine == null) 
+        {
+            return;
+        }
+
         if (fov.alertLevel < 50)
         {
             if (stateMachine.currentState is not IdleState)
@@ -63,6 +69,12 @@ public class Enemy : MonoBehaviour
         stateMachine.Update();
     }
 
+    public void SetState(MyState newState) 
+    {
+        myState = newState;
+        UpdateCurrentState();
+    }
+    
     public void UpdateCurrentState()
     {
         if (myState == MyState.idle)
@@ -76,6 +88,10 @@ public class Enemy : MonoBehaviour
         else if (myState == MyState.alert)
         {
             stateMachine.ChangeState(new AlertState(this.gameObject));
+        }
+        else if (myState == MyState.dead) 
+        {
+            stateMachine.ChangeState(new DeadState(this.gameObject));
         }
     }
 
@@ -106,7 +122,7 @@ public class Enemy : MonoBehaviour
                 float t = 0;
                 while (t < 1)
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation,waypoint.rotation,t * 0.1f);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, waypoint.rotation, t * 0.1f);
                     t += Time.deltaTime;
                     yield return null;
                 }
@@ -127,7 +143,7 @@ public class Enemy : MonoBehaviour
 
     public bool closeEnough(Transform destination)
     {
-        return Vector3.Distance(navMeshAgent.transform.position, destination.position) < 0.1? true : false;
+        return Vector3.Distance(navMeshAgent.transform.position, destination.position) < 0.1 ? true : false;
     }
 
     public void MoveToPlayer()
@@ -143,5 +159,20 @@ public class Enemy : MonoBehaviour
     internal void UpdateMoveSpeed(float multiplier)
     {
         navMeshAgent.speed = topSpeed * multiplier;
+    }
+
+    internal void Dead()
+    {
+        DisableSelf();
+        enemyAnimationHandler.PlayDeath();        
+        stateMachine = null;
+    }
+
+    private void DisableSelf()
+    {
+        fov.enabled = false;
+        navMeshAgent.enabled = false;
+        patrol.enabled = false;        
+        this.enabled = false;
     }
 }

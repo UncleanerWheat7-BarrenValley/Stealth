@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class FOV : MonoBehaviour
 {
+    [SerializeField]
+    EnemyManager enemyManager;
+
     public float fovValue;
     public float depthOfViewValue;
     float angleValue;
@@ -26,11 +29,13 @@ public class FOV : MonoBehaviour
 
     IEnumerator FindTargetWithDelay(float delay)
     {
-        while (true)
+        while (enemyManager.Health > 0)
         {
             yield return new WaitForSeconds(delay);
             FindTarget();
         }
+
+        yield break;
     }
 
     public Vector3 DirFromAngle(float angleInDegrees)

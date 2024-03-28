@@ -124,7 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f767168ce6e297f459b257db07eb029d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateLight: {fileID: 0}
+  patrol: {fileID: 1174309816669684346}
+  enemyAnimationHandler: {fileID: 8865613505599997520}
+  navMeshAgent: {fileID: 21805652375653700}
+  fov: {fileID: 5141091394348216485}
+  stateLight: {fileID: 7994240490617929047}
   playerTransform: {fileID: 0}
   currentMoveSpeed: 0
   myState: 0
@@ -140,11 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a5faa515dbcf147b3a24179f80a01b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fovValue: 0
-  depthOfViewValue: 0
+  enemyManager: {fileID: 7823944095076314654}
+  fovValue: 90
+  depthOfViewValue: 5
   playerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   alertLevel: 0
 --- !u!114 &7823944095076314654
 MonoBehaviour:
@@ -158,6 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d6b40af064fb9469f6944e48940c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 211795123776782343}
+  fov: {fileID: 5141091394348216485}
 --- !u!114 &1174309816669684346
 MonoBehaviour:
   m_ObjectHideFlags: 0
