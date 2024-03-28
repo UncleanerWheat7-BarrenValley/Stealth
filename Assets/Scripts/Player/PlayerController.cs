@@ -8,6 +8,16 @@ public class PlayerController : MonoBehaviour
     public GameObject model;
     public float movementSpeed;
 
+    [SerializeField]
+    GameObject gunObj;
+
+    public bool gunB { get { return gunB; } 
+        set
+        {            
+            gunObj.SetActive(!gunObj.activeSelf);
+        }
+    }
+
     private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
     Transform mainCamera;
@@ -24,7 +34,7 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main.transform;
-        UpdateCurrentState();
+        UpdateCurrentState();        
     }
 
     // Update is called once per frame
@@ -32,7 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         float tick = Time.deltaTime;
         ApplyInputMovement();
-        handlePlayerRotation(tick);
+        HandlePlayerRotation(tick);
         HandleWallHug();
         playerStateMachine.Update();
     }
@@ -78,7 +88,7 @@ public class PlayerController : MonoBehaviour
         GetComponent<Rigidbody>().velocity = projectedVelocity;
     }
 
-    private void handlePlayerRotation(float tick)
+    private void HandlePlayerRotation(float tick)
     {        
         if (myState is MyState.wall) return;
 

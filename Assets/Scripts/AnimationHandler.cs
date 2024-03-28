@@ -10,7 +10,8 @@ public class AnimationHandler : MonoBehaviour
     public PlayerInput playerInput;
     int animMovementSpeed;
     int animWallMovementSpeed;
-    int punch;
+    int attack;
+    int gunActive;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +19,8 @@ public class AnimationHandler : MonoBehaviour
         animator = GetComponent<Animator>();
         animMovementSpeed = Animator.StringToHash("MovementSpeed");
         animWallMovementSpeed = Animator.StringToHash("WallMovementSpeed");
-        punch = Animator.StringToHash("Punch");
-
+        attack = Animator.StringToHash("Attack");
+        gunActive = Animator.StringToHash("GunActive");
     }
    
     private void Update()
@@ -27,21 +28,22 @@ public class AnimationHandler : MonoBehaviour
         animator.SetFloat(animMovementSpeed, playerInput.moveAmount);
         animator.SetFloat(animWallMovementSpeed, playerInput.horizontalInput);
 
-        if (playerInput.punch)
+        if (playerInput.attack)
         {
-            Fire1();
+            Fire1(playerInput.gunFlag);
         }
     }
 
-    public void Fire1()
+    public void Fire1(bool gun)
     {
-        animator.SetBool(punch, true);
-        playerInput.punch = false;
+        animator.SetBool(gunActive, gun);
+        animator.SetBool(attack, true);
+        playerInput.attack = false;
     }
 
-    public void EndPunch() //animation event
+    public void EndAttack() //animation event
     {
-        animator.SetBool(punch, false);
+        animator.SetBool(attack, false);
     }
 
     private void OnTriggerEnter(Collider other)

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
@@ -8,14 +9,16 @@ public class PlayerInput : MonoBehaviour
     Vector2 cameraInput;
 
     public bool eInput = false;
+    public bool twoInput = false;
     public bool wallHugFlag;
+    public bool gunFlag;
 
     public float horizontalInput;
     public float verticalInput;
     public float moveAmount;
     public float mouseX;
     public float mouseY;
-    public bool punch = false;
+    public bool attack = false;
 
     private void OnEnable()
     {
@@ -25,6 +28,7 @@ public class PlayerInput : MonoBehaviour
             controls.PlayerInput.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
             controls.PlayerInput.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
             controls.PlayerActions.HugWall.performed += i => eInput = i.performed;
+            controls.PlayerActions.SelectGun.performed += i => twoInput = i.performed;
             controls.PlayerInput.Fire1.performed += inputActions => Fire1();
         }
 
@@ -36,12 +40,13 @@ public class PlayerInput : MonoBehaviour
         TranslateInputMovement();
         TranslateInputCamera();
         HandleEInput();
+        HandleTwoInput();
     }
 
     private void TranslateInputCamera()
     {
         mouseX = cameraInput.x;
-        mouseY = cameraInput.y *-1;      
+        mouseY = cameraInput.y * -1;
     }
 
     private void TranslateInputMovement()
@@ -50,18 +55,28 @@ public class PlayerInput : MonoBehaviour
         verticalInput = movementInput.y;
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
     }
-    private void HandleEInput() 
-    {        
-        if (eInput) 
+    private void HandleEInput()
+    {
+        if (eInput)
         {
             wallHugFlag = !wallHugFlag;
             eInput = false;
         }
     }
+    private void HandleTwoInput()
+    {
+        if (twoInput)
+        {
+            print(twoInput);
+            gunFlag = !gunFlag;
+            GetComponent<PlayerController>().gunB = gunFlag;
+            twoInput = false;
+        }
+    }
 
     private void Fire1()
     {
-        punch = true;
+        attack = true;
         print("Fired");
     }
 

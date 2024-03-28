@@ -147,6 +147,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectGun"",
+                    ""type"": ""Button"",
+                    ""id"": ""7bda9a6e-541f-4023-bf56-076e5862c654"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -158,6 +167,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""HugWall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f213896-2b50-4ffd-ad17-3ad5b6f1d691"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -174,6 +194,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         // PlayerActions
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_HugWall = m_PlayerActions.FindAction("HugWall", throwIfNotFound: true);
+        m_PlayerActions_SelectGun = m_PlayerActions.FindAction("SelectGun", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -298,11 +319,13 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerActions;
     private List<IPlayerActionsActions> m_PlayerActionsActionsCallbackInterfaces = new List<IPlayerActionsActions>();
     private readonly InputAction m_PlayerActions_HugWall;
+    private readonly InputAction m_PlayerActions_SelectGun;
     public struct PlayerActionsActions
     {
         private @Controls m_Wrapper;
         public PlayerActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @HugWall => m_Wrapper.m_PlayerActions_HugWall;
+        public InputAction @SelectGun => m_Wrapper.m_PlayerActions_SelectGun;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -315,6 +338,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HugWall.started += instance.OnHugWall;
             @HugWall.performed += instance.OnHugWall;
             @HugWall.canceled += instance.OnHugWall;
+            @SelectGun.started += instance.OnSelectGun;
+            @SelectGun.performed += instance.OnSelectGun;
+            @SelectGun.canceled += instance.OnSelectGun;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -322,6 +348,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HugWall.started -= instance.OnHugWall;
             @HugWall.performed -= instance.OnHugWall;
             @HugWall.canceled -= instance.OnHugWall;
+            @SelectGun.started -= instance.OnSelectGun;
+            @SelectGun.performed -= instance.OnSelectGun;
+            @SelectGun.canceled -= instance.OnSelectGun;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -348,5 +377,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public interface IPlayerActionsActions
     {
         void OnHugWall(InputAction.CallbackContext context);
+        void OnSelectGun(InputAction.CallbackContext context);
     }
 }
