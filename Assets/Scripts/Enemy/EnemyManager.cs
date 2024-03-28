@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour, ICharacter
 {
+    [SerializeField]
+    Enemy enemy;
+    [SerializeField]
+    FOV fov;
     public int Health { get; set; } = 5;
     public float moveSpeed { get; set; } = 5;
 
@@ -12,9 +16,9 @@ public class EnemyManager : MonoBehaviour, ICharacter
         Health -= damage;
         if(Health <= 0) 
         {
-            GetComponent<Enemy>().SetState(Enemy.MyState.dead);
+            enemy.SetState(Enemy.MyState.dead);
             return;
         }
-        GetComponent<FOV>().alertLevel = 100;
+        fov.alertLevel = 100;
     }
 }

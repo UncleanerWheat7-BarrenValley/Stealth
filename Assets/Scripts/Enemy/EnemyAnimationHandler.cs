@@ -16,7 +16,6 @@ public class EnemyAnimationHandler : MonoBehaviour
 
     private void Update()
     {
-        //shouldnt be in update
         animator.SetFloat("Speed", enemyScript.currentMoveSpeed);
     }
 

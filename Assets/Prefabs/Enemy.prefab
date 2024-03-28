@@ -163,6 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d6b40af064fb9469f6944e48940c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 211795123776782343}
+  fov: {fileID: 5141091394348216485}
 --- !u!114 &1174309816669684346
 MonoBehaviour:
   m_ObjectHideFlags: 0

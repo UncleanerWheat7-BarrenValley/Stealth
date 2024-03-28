@@ -2,9 +2,6 @@ using UnityEngine;
 using static StateMachine;
 using UnityEngine.AI;
 using System.Collections;
-using System.Threading.Tasks;
-using UnityEngine.UIElements;
-using static UnityEngine.UI.GridLayoutGroup;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
