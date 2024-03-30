@@ -65,6 +65,8 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyInputMovement()
     {
+        if (playerInput.aimFlag) return;
+
         if (myState is not MyState.wall)
         {
             moveDirection = mainCamera.forward * playerInput.verticalInput;

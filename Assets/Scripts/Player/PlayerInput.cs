@@ -12,6 +12,7 @@ public class PlayerInput : MonoBehaviour
     public bool twoInput = false;
     public bool wallHugFlag;
     public bool gunFlag;
+    public bool aimFlag;
 
     public float horizontalInput;
     public float verticalInput;
@@ -76,8 +77,23 @@ public class PlayerInput : MonoBehaviour
 
     private void Fire1()
     {
-        attack = true;
-        print("Fired");
+        if (controls.PlayerInput.Fire1.IsPressed() && gunFlag)
+        {
+            print("aim");
+            aimFlag = true;
+            attack = true;
+        }
+        else if (!controls.PlayerInput.Fire1.IsPressed() && gunFlag)
+        {
+            print("Fire");
+            aimFlag = false;
+            attack = true;
+        }
+        else if(controls.PlayerInput.Fire1.IsPressed() && !gunFlag)
+        {
+            print("Fire");
+            attack = true;
+        }
     }
 
     private void OnDisable()

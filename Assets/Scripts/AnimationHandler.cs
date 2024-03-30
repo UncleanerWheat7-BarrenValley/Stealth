@@ -12,6 +12,7 @@ public class AnimationHandler : MonoBehaviour
     int animWallMovementSpeed;
     int attack;
     int gunActive;
+    int aim;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class AnimationHandler : MonoBehaviour
         animWallMovementSpeed = Animator.StringToHash("WallMovementSpeed");
         attack = Animator.StringToHash("Attack");
         gunActive = Animator.StringToHash("GunActive");
+        aim = Animator.StringToHash("Aim");
     }
    
     private void Update()
@@ -30,14 +32,15 @@ public class AnimationHandler : MonoBehaviour
 
         if (playerInput.attack)
         {
-            Fire1(playerInput.gunFlag);
+            Fire1(playerInput.gunFlag, playerInput.aimFlag);
         }
     }
 
-    public void Fire1(bool gun)
+    public void Fire1(bool gun, bool aiming)
     {
         animator.SetBool(gunActive, gun);
         animator.SetBool(attack, true);
+        animator.SetBool(aim, aiming);
         playerInput.attack = false;
     }
 
