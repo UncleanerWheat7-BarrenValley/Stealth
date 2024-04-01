@@ -11,9 +11,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject gunObj;
 
-    public bool gunB { get { return gunB; } 
+    public bool gunB
+    {
+        get { return gunB; }
         set
-        {            
+        {
             gunObj.SetActive(!gunObj.activeSelf);
         }
     }
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
     public enum MyState
     {
-        normal, crouch, wall
+        normal, crouch, wall, aim
     }
 
     private void Awake()
@@ -34,7 +36,7 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main.transform;
-        UpdateCurrentState();        
+        SetState(myState);
     }
 
     // Update is called once per frame
@@ -43,8 +45,14 @@ public class PlayerController : MonoBehaviour
         float tick = Time.deltaTime;
         ApplyInputMovement();
         HandlePlayerRotation(tick);
-        HandleWallHug();
+        //HandleWallHug();
         playerStateMachine.Update();
+    }
+
+    public void SetState(MyState newState)
+    {
+        myState = newState;
+        UpdateCurrentState();
     }
 
     public void UpdateCurrentState()
@@ -61,11 +69,18 @@ public class PlayerController : MonoBehaviour
         {
             playerStateMachine.ChangeState(new WallState(this.gameObject));
         }
+        else if (myState == MyState.aim)
+        {
+            playerStateMachine.ChangeState(new AimState(this.gameObject));
+        }
     }
 
     private void ApplyInputMovement()
     {
-        if (playerInput.aimFlag) return;
+        if (myState is MyState.aim)
+        {
+            return;
+        }
 
         if (myState is not MyState.wall)
         {
@@ -91,10 +106,15 @@ public class PlayerController : MonoBehaviour
     }
 
     private void HandlePlayerRotation(float tick)
-    {        
+    {
         if (myState is MyState.wall) return;
+        if (myState is MyState.aim) 
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, mainCamera.rotation, 15 * tick); ;
+            return;
+        }
 
-        Vector3 targetDir = (mainCamera.forward * playerInput.verticalInput) + (mainCamera.right * playerInput.horizontalInput);        
+        Vector3 targetDir = (mainCamera.forward * playerInput.verticalInput) + (mainCamera.right * playerInput.horizontalInput);
         targetDir.y = 0;
         targetDir.Normalize();
 
@@ -111,10 +131,10 @@ public class PlayerController : MonoBehaviour
 
     public void HandleWallHug()
     {
-        if (!playerInput.wallHugFlag)
+        if (myState is MyState.wall)
         {
             myState = MyState.normal;
-            UpdateCurrentState();
+            SetState(myState);
             return;
         }
 
@@ -123,7 +143,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, 1))
         {
             myState = MyState.wall;
-            UpdateCurrentState();
+            SetState(myState);
             AttachToWall(hitInfo);
         }
         else

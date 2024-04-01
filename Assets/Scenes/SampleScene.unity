@@ -9254,6 +9254,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596521366}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &614474847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 614474848}
+  m_Layer: 3
+  m_Name: CameraTargetShoulder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &614474848
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614474847}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.42, y: 1.533, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 684639449}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &618469037
 GameObject:
   m_ObjectHideFlags: 0
@@ -15181,6 +15212,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 980759868}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &989641120 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3711815798815373172, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
+  m_PrefabInstance: {fileID: 1709908832632914296}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9b4bd105cb81945acad00548cad370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &990449043
 GameObject:
   m_ObjectHideFlags: 0
@@ -33452,6 +33494,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.75581735
       objectReference: {fileID: 0}
+    - target: {fileID: 1581642964455112473, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
+      propertyPath: targetAim
+      value: 
+      objectReference: {fileID: 614474848}
     - target: {fileID: 1619255487472726768, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.037911892
@@ -34228,6 +34274,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.054976188
       objectReference: {fileID: 0}
+    - target: {fileID: 7850974416474169079, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 989641120}
     - target: {fileID: 7857744895087394230, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.0011600349
@@ -34378,7 +34428,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 396101986767521278, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 614474848}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3804494970272053921, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
       insertIndex: -1

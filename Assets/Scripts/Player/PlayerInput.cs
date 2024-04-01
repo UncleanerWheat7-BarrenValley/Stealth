@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
+    [SerializeField]
+    PlayerController playerController;
     Controls controls;
     public CameraController cameraController;
     Vector2 movementInput;
@@ -61,6 +63,7 @@ public class PlayerInput : MonoBehaviour
         if (eInput)
         {
             wallHugFlag = !wallHugFlag;
+            playerController.HandleWallHug();
             eInput = false;
         }
     }
@@ -82,12 +85,14 @@ public class PlayerInput : MonoBehaviour
             print("aim");
             aimFlag = true;
             attack = true;
+            playerController.SetState(PlayerController.MyState.aim);
         }
         else if (!controls.PlayerInput.Fire1.IsPressed() && gunFlag)
         {
             print("Fire");
             aimFlag = false;
             attack = true;
+            playerController.SetState(PlayerController.MyState.normal);
         }
         else if(controls.PlayerInput.Fire1.IsPressed() && !gunFlag)
         {

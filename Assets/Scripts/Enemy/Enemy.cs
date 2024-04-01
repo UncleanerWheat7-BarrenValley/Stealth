@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
         UpdateCurrentState();
     }
     
-    public void UpdateCurrentState()
+    private void UpdateCurrentState()
     {
         if (myState == MyState.idle)
         {

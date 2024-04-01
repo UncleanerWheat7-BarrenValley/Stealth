@@ -7,6 +7,7 @@ public class StateMachine
    
     public void ChangeState(IStates newState)
     {
+        Debug.Log("Changing State");
         if (currentState != null)
         {
             currentState.ExitState();
