@@ -26,31 +26,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (playerInput.aimFlag != true)
-        {
-            NormalCameraFollow();
-            return;
-        }
-        else
-        {
-            AimCameraFollow();
-        }
-    }
-
-    private void AimCameraFollow()
-    {
-        currentX += playerInput.mouseX * sensitivity;
-        currentY = 20;
-
-        Quaternion rotation = Quaternion.Euler(0, currentX, 0);
-        //transform.position = targetAim.position - rotation * Vector3.forward * 0.5f;
-        transform.position = Vector3.Slerp(transform.position, targetAim.position - rotation * Vector3.forward * 0.5f, Time.deltaTime * 10);
-
-        Quaternion lookAt = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime * 20);
-        transform.rotation = lookAt;
-
-
-        //transform.rotation = rotation;
+        NormalCameraFollow();
     }
 
     private void NormalCameraFollow()

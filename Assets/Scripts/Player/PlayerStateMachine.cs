@@ -117,8 +117,7 @@ public class PlayerStateMachine
 
         public void EnterState()
         {
-            Debug.Log("Enter Aim state");
-            playerController.movementSpeed = 2;
+            Debug.Log("Enter Aim state");            
         }
 
         public void ExecuteState()

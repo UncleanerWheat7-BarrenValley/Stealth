@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static PlayerStateMachine;
 
@@ -6,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public MyState myState;
     public Rigidbody rb;
     public GameObject model;
+    public GameObject enemyToAimAt;
     public float movementSpeed;
 
     [SerializeField]
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
         HandlePlayerRotation(tick);
         //HandleWallHug();
         playerStateMachine.Update();
+        //        HandleAutoAim();
     }
 
     public void SetState(MyState newState)
@@ -72,7 +77,42 @@ public class PlayerController : MonoBehaviour
         else if (myState == MyState.aim)
         {
             playerStateMachine.ChangeState(new AimState(this.gameObject));
+            HandleAutoAim();
         }
+    }
+    public LayerMask enemyLayerMask;
+
+    private void HandleAutoAim()
+    {
+        enemyToAimAt = null;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 10, enemyLayerMask);
+
+        float distance = 20;
+        foreach (Collider enemy in hitColliders)
+        {
+            if (Vector3.Angle(enemy.transform.position - transform.position, transform.forward) < 30)
+            {
+                if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
+                {
+                    enemyToAimAt = enemy.gameObject;
+                    distance = Vector3.Distance(transform.position, enemy.transform.position);
+                }
+            }
+
+        }
+
+        if (enemyToAimAt != null)
+        {
+            transform.LookAt(enemyToAimAt.transform.position);
+        }
+    }
+
+
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position + Vector3.forward, 10);
     }
 
     private void ApplyInputMovement()
@@ -108,11 +148,6 @@ public class PlayerController : MonoBehaviour
     private void HandlePlayerRotation(float tick)
     {
         if (myState is MyState.wall) return;
-        if (myState is MyState.aim) 
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, mainCamera.rotation, 15 * tick); ;
-            return;
-        }
 
         Vector3 targetDir = (mainCamera.forward * playerInput.verticalInput) + (mainCamera.right * playerInput.horizontalInput);
         targetDir.y = 0;
