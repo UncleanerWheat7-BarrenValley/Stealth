@@ -19,6 +19,11 @@ public class EnemyAnimationHandler : MonoBehaviour
         animator.SetFloat("Speed", enemyScript.currentMoveSpeed);
     }
 
+    public void PlayFire(bool fire) 
+    {
+        animator.SetBool("Fire", fire);
+    }
+
     public void PlayDeath()
     {
         animator.SetTrigger("Death");

@@ -104,13 +104,43 @@ public class StateMachine
         }
 
         public void ExecuteState()
-        {
+        {            
             enemyScript.MoveToPlayer();
         }
 
         public void ExitState()
         {
             Debug.Log("Exit Alert state");
+        }
+    }
+
+    public class FireState : IStates
+    {
+
+        GameObject owner;
+        Enemy enemyScript;
+        public FireState(GameObject owner)
+        {
+            this.owner = owner;
+            enemyScript = owner.GetComponent<Enemy>();
+        }
+        public void EnterState()
+        {
+            Debug.Log("Fire State");
+            enemyScript.ChangeLightColour(new Color(0.5f, 0.5f, 0, 0));
+            enemyScript.UpdateMoveSpeed(0);
+            enemyScript.FireGun(true);
+        }
+
+        public void ExecuteState()
+        {
+            
+        }
+
+        public void ExitState()
+        {
+            enemyScript.FireGun(false);
+            Debug.Log("Exit Fire state");
         }
     }
 

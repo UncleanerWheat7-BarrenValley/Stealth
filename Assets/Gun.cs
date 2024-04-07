@@ -7,18 +7,31 @@ public class Gun : MonoBehaviour
 {
     [SerializeField]
     Transform bulletStartPoint;
+
+
+
+    [SerializeField]
+    string tagToHit;
+
     public void FireGun()
     {
-        Debug.DrawRay(bulletStartPoint.position, transform.forward * 100, UnityEngine.Color.green,10000);
-        if (Physics.Raycast(bulletStartPoint.position, transform.forward, out RaycastHit hitInfo, 100))
+        Debug.DrawRay(bulletStartPoint.position, bulletStartPoint.forward * 100, UnityEngine.Color.green, 5);
+        if (Physics.Raycast(bulletStartPoint.position, bulletStartPoint.forward, out RaycastHit hitInfo, 100))
         {
-            if (hitInfo.transform.tag == "Enemy")
+            if (hitInfo.transform.tag == tagToHit)
             {
-                Debug.LogWarning("ItHit");
-                Debug.LogWarning(hitInfo.transform.GetComponent<EnemyManager>().Health);
-                hitInfo.transform.GetComponent<EnemyManager>().Damage(3);
-                Debug.LogWarning(hitInfo.transform.GetComponent<EnemyManager>().Health);
-                print("yay");
+                if (tagToHit == "Enemy")
+                {
+                    Debug.LogWarning(hitInfo.transform.GetComponent<EnemyManager>().Health);
+                    hitInfo.transform.GetComponent<EnemyManager>().Damage(3);
+                    Debug.LogWarning(hitInfo.transform.GetComponent<EnemyManager>().Health);
+                }
+                else 
+                {
+                    Debug.LogWarning(hitInfo.transform.GetComponent<PlayerManager>().Health);
+                    hitInfo.transform.GetComponent<PlayerManager>().Damage(3);
+                    Debug.LogWarning(hitInfo.transform.GetComponent<PlayerManager>().Health);
+                }
             }
         }
         else { print("fail"); }

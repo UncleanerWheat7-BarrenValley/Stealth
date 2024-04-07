@@ -15,6 +15,9 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     [SerializeField]
     private FOV fov;
+    [SerializeField]
+    private Gun gun;
+
 
     private Vector3 randomPoint;
     private float topSpeed;
@@ -26,7 +29,7 @@ public class Enemy : MonoBehaviour
     public MyState myState;
     public enum MyState
     {
-        idle, caution, alert, dead
+        idle, caution, alert, dead, fire
     }
 
     void Start()
@@ -37,7 +40,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (stateMachine == null) 
+        if (stateMachine == null)
         {
             return;
         }
@@ -69,12 +72,12 @@ public class Enemy : MonoBehaviour
         stateMachine.Update();
     }
 
-    public void SetState(MyState newState) 
+    public void SetState(MyState newState)
     {
         myState = newState;
         UpdateCurrentState();
     }
-    
+
     private void UpdateCurrentState()
     {
         if (myState == MyState.idle)
@@ -89,9 +92,13 @@ public class Enemy : MonoBehaviour
         {
             stateMachine.ChangeState(new AlertState(this.gameObject));
         }
-        else if (myState == MyState.dead) 
+        else if (myState == MyState.dead)
         {
             stateMachine.ChangeState(new DeadState(this.gameObject));
+        }
+        else if (myState == MyState.fire)
+        {
+            stateMachine.ChangeState(new FireState(this.gameObject));
         }
     }
 
@@ -148,7 +155,19 @@ public class Enemy : MonoBehaviour
 
     public void MoveToPlayer()
     {
-        navMeshAgent.destination = playerTransform.position;
+        if (Vector3.Distance(transform.position, playerTransform.position) > 3)
+        {
+            navMeshAgent.destination = playerTransform.position;
+            SetState(MyState.alert);
+        }
+        else
+            SetState(MyState.fire);
+    }
+
+    public void FireGun(bool fire)
+    {
+        transform.LookAt(playerTransform.position);
+        enemyAnimationHandler.PlayFire(fire);
     }
 
     internal void ChangeLightColour(Color colourValue)
@@ -164,7 +183,7 @@ public class Enemy : MonoBehaviour
     internal void Dead()
     {
         DisableSelf();
-        enemyAnimationHandler.PlayDeath();        
+        enemyAnimationHandler.PlayDeath();
         stateMachine = null;
     }
 
@@ -172,7 +191,7 @@ public class Enemy : MonoBehaviour
     {
         fov.enabled = false;
         navMeshAgent.enabled = false;
-        patrol.enabled = false;        
+        patrol.enabled = false;
         this.enabled = false;
     }
 }
