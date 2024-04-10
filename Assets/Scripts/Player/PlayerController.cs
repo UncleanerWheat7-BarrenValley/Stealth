@@ -107,7 +107,6 @@ public class PlayerController : MonoBehaviour
                     distance = Vector3.Distance(transform.position, enemy.transform.position);
                 }
             }
-
         }
 
         if (enemyToAimAt != null)

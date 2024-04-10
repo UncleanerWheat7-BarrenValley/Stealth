@@ -2328,6 +2328,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130203297}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &132674250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8889114453869747280, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+  m_PrefabInstance: {fileID: 1484781606}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2697950599367449ab83054d9ee2201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &138673424
 GameObject:
   m_ObjectHideFlags: 0
@@ -22900,7 +22911,7 @@ PrefabInstance:
     - target: {fileID: 211795123776782343, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
       propertyPath: gun
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 132674250}
     - target: {fileID: 211795123776782343, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
       propertyPath: playerTransform
       value: 
@@ -22949,6 +22960,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5141091394348216485, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+      propertyPath: depthOfViewValue
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889114453869747280, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+      propertyPath: randXEdge
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889114453869747280, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+      propertyPath: randYEdge
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889114453869747280, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+      propertyPath: inaccurate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889114453869747280, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+      propertyPath: bulletTrail
+      value: 
+      objectReference: {fileID: 2676583602954685874, guid: e53d332c22ac36d46aabd6a3b155d640, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33915,6 +33946,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.023851559
       objectReference: {fileID: 0}
+    - target: {fileID: 4995942546170142846, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
+      propertyPath: bulletTrail
+      value: 
+      objectReference: {fileID: 2676583602954685874, guid: e53d332c22ac36d46aabd6a3b155d640, type: 3}
     - target: {fileID: 5101052744769457693, guid: 13e8f911f628be74ea53292d0e1de748, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.07295759

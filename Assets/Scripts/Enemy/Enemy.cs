@@ -2,6 +2,7 @@ using UnityEngine;
 using static StateMachine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
@@ -18,24 +19,29 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Gun gun;
 
-
     private Vector3 randomPoint;
     private float topSpeed;
+    private Vector3 playerShadowTransformPosition;
 
-    public Light stateLight;
     public Transform playerTransform;
+    public Light stateLight;
     public float currentMoveSpeed;
 
     public MyState myState;
     public enum MyState
     {
-        idle, caution, alert, dead, fire
+        idle,
+        caution,
+        alert,
+        dead,
+        fire
     }
 
     void Start()
     {
         topSpeed = navMeshAgent.speed;
         SetState(myState);
+        playerShadowTransformPosition = playerTransform.position;
     }
 
     private void Update()
@@ -49,7 +55,6 @@ public class Enemy : MonoBehaviour
         {
             if (stateMachine.currentState is not IdleState)
             {
-                print(stateMachine.currentState);
                 stateMachine.ChangeState(new IdleState(this.gameObject));
             }
         }
@@ -57,17 +62,17 @@ public class Enemy : MonoBehaviour
         {
             if (stateMachine.currentState is not CautionState)
             {
-                print(stateMachine.currentState);
                 stateMachine.ChangeState(new CautionState(this.gameObject));
             }
         }
         else if (fov.alertLevel >= 75)
         {
-            if (stateMachine.currentState is not AlertState)
+            if (stateMachine.currentState is not AlertState && stateMachine.currentState is not FireState)
             {
                 stateMachine.ChangeState(new AlertState(this.gameObject));
             }
         }
+        print(stateMachine.currentState);
         currentMoveSpeed = navMeshAgent.velocity.magnitude / topSpeed;//for animation speed
         stateMachine.Update();
     }
@@ -122,7 +127,7 @@ public class Enemy : MonoBehaviour
         while (stateMachine.currentState is IdleState)
         {
             waypoint = patrol.patrolTransforms[patrol.currentWaypoint];
-            if (closeEnough(waypoint))
+            if (Vector3.Distance(navMeshAgent.transform.position, waypoint.position) < 0.1 ? true : false)
             {
                 float waitTime = patrol.waypointWaitTime;
 
@@ -148,26 +153,38 @@ public class Enemy : MonoBehaviour
         GetComponent<NavMeshAgent>().destination = randomPoint;
     }
 
-    public bool closeEnough(Transform destination)
+    public void UpdatePlayerShadow()
     {
-        return Vector3.Distance(navMeshAgent.transform.position, destination.position) < 0.1 ? true : false;
+        playerShadowTransformPosition = playerTransform.position;
     }
 
     public void MoveToPlayer()
     {
-        if (Vector3.Distance(transform.position, playerTransform.position) > 3)
+        navMeshAgent.destination = playerShadowTransformPosition;
+
+        if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 3 && fov.PlayerInFOV())
         {
-            navMeshAgent.destination = playerTransform.position;
-            SetState(MyState.alert);
-        }
-        else
             SetState(MyState.fire);
+        }
     }
 
     public void FireGun(bool fire)
     {
-        transform.LookAt(playerTransform.position);
         enemyAnimationHandler.PlayFire(fire);
+    }
+
+    public void AimAtPlayer()
+    {
+        if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 5)
+        {
+            Quaternion rotation = Quaternion.LookRotation(playerShadowTransformPosition - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.25f);
+        }
+        else 
+        {
+            enemyAnimationHandler.PlayFire(false);
+            SetState(MyState.alert);
+        }
     }
 
     internal void ChangeLightColour(Color colourValue)
