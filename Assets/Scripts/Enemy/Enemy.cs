@@ -3,6 +3,7 @@ using static StateMachine;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEngine.UIElements;
+using static PlayerManager;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
@@ -18,6 +19,8 @@ public class Enemy : MonoBehaviour
     private FOV fov;
     [SerializeField]
     private Gun gun;
+
+    
 
     private Vector3 randomPoint;
     private float topSpeed;
@@ -37,11 +40,23 @@ public class Enemy : MonoBehaviour
         fire
     }
 
+    private void OnEnable()
+    {
+        PlayerManager.playerDied += playerDied;
+        
+    }
+
+    private void OnDisable()
+    {
+        PlayerManager.playerDied -= playerDied;
+    }
+
     void Start()
     {
         topSpeed = navMeshAgent.speed;
         SetState(myState);
         playerShadowTransformPosition = playerTransform.position;
+
     }
 
     private void Update()
@@ -168,9 +183,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void FireGun()
+    public void FireGun(bool fire)
     {
-        enemyAnimationHandler.PlayFire(true);
+        enemyAnimationHandler.PlayFire(fire);
     }
 
     public void AimAtPlayer()
@@ -182,7 +197,7 @@ public class Enemy : MonoBehaviour
         }
         else 
         {
-            enemyAnimationHandler.PlayFire(false);
+            FireGun(false);
             SetState(MyState.alert);
         }
     }
@@ -210,5 +225,11 @@ public class Enemy : MonoBehaviour
         navMeshAgent.enabled = false;
         patrol.enabled = false;
         this.enabled = false;
+    }
+
+    void playerDied() 
+    {        
+        fov.alertLevel = 0;
+        SetState(MyState.idle);
     }
 }

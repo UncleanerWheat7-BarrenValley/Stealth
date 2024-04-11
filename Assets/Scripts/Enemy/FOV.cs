@@ -62,7 +62,7 @@ public class FOV : MonoBehaviour
         if (!distanceInRange || !radiusInRange)
         {
             playerInFOV = false;
-            AlertCooldown();
+            AlertCooldown(2);
             return;
         }
 
@@ -80,11 +80,12 @@ public class FOV : MonoBehaviour
             else 
             {
                 playerInFOV = false;
+                AlertCooldown(1);
             }
         }
     }
 
-    private async void AlertCooldown()
+    private async void AlertCooldown(int multipier)
     {
         while (alertLevel > 0)
         {
@@ -93,7 +94,7 @@ public class FOV : MonoBehaviour
                 break;
             }
 
-            alertLevel = Mathf.MoveTowards(alertLevel, 0, 1 * Time.deltaTime);
+            alertLevel = Mathf.MoveTowards(alertLevel, 0, multipier * Time.deltaTime);
 
             await Task.Yield();
         }
