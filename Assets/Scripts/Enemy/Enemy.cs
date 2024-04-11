@@ -195,7 +195,7 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 5)
         {
             Quaternion rotation = Quaternion.LookRotation(playerShadowTransformPosition - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.25f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1f);
         }
         else 
         {
