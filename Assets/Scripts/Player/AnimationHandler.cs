@@ -13,6 +13,7 @@ public class AnimationHandler : MonoBehaviour
     int attack;
     int gunActive;
     int aim;
+    int death;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,7 @@ public class AnimationHandler : MonoBehaviour
         attack = Animator.StringToHash("Attack");
         gunActive = Animator.StringToHash("GunActive");
         aim = Animator.StringToHash("Aim");
+        death = Animator.StringToHash("Death");
     }
    
     private void Update()
@@ -58,6 +60,11 @@ public class AnimationHandler : MonoBehaviour
             other.GetComponent<EnemyManager>().Damage(1);
             Debug.LogWarning(other.GetComponent<EnemyManager>().Health);
         }
+    }
+
+    public void PlayDeath() 
+    {
+        animator.SetTrigger(death);
     }
 
 }

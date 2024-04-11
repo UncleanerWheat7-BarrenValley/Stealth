@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.AI;
 using static PlayerStateMachine;
 
 public class PlayerController : MonoBehaviour
@@ -14,6 +16,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     GameObject gunObj;
+
+    [SerializeField]
+    private AnimationHandler animationHandler;
 
     public bool gunB
     {
@@ -32,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     public enum MyState
     {
-        normal, crouch, wall, aim
+        normal, crouch, wall, aim, dead
     }
 
     private void Awake()
@@ -79,6 +84,10 @@ public class PlayerController : MonoBehaviour
             playerStateMachine.ChangeState(new AimState(this.gameObject));
             HandleAutoAim();
         }
+        else if (myState == MyState.dead)
+        {
+            playerStateMachine.ChangeState(new DeadState(this.gameObject));
+        }
     }
     public LayerMask enemyLayerMask;
 
@@ -98,7 +107,6 @@ public class PlayerController : MonoBehaviour
                     distance = Vector3.Distance(transform.position, enemy.transform.position);
                 }
             }
-
         }
 
         if (enemyToAimAt != null)
@@ -198,5 +206,16 @@ public class PlayerController : MonoBehaviour
         Quaternion yRotQuaternion = Quaternion.Euler(0, yRot, 0);
         transform.position = hitInfo.point;
         transform.rotation = yRotQuaternion;
+    }
+
+    internal void Dead()
+    {
+        animationHandler.PlayDeath();
+        DisableSelf();
+    }
+
+    private void DisableSelf()
+    {
+        this.enabled = false;
     }
 }

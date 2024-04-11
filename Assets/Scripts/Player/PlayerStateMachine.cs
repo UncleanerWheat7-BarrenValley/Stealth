@@ -129,4 +129,32 @@ public class PlayerStateMachine
             Debug.Log("Exit Aim state");
         }
     }
+
+    public class DeadState : IStates
+    {
+
+        GameObject owner;
+        PlayerController playerController;
+
+        public DeadState(GameObject owner)
+        {
+            this.owner = owner;
+            playerController = owner.GetComponent<PlayerController>();
+
+        }
+        public void EnterState()
+        {
+            playerController.Dead();
+            playerController.movementSpeed = 0;
+        }
+
+        public void ExecuteState()
+        {
+
+        }
+
+        public void ExitState()
+        {
+        }
+    }
 }
