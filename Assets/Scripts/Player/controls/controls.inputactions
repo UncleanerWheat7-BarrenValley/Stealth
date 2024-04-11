@@ -29,7 +29,7 @@
                     "id": "d7139cc5-3886-43f3-beba-57c7c2275875",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": false
                 }
             ],
@@ -125,6 +125,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SelectGun",
+                    "type": "Button",
+                    "id": "7bda9a6e-541f-4023-bf56-076e5862c654",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -136,6 +145,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "HugWall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f213896-2b50-4ffd-ad17-3ad5b6f1d691",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

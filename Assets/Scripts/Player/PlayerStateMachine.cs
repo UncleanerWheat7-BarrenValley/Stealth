@@ -6,6 +6,7 @@ public class PlayerStateMachine
 
     public void ChangeState(IStates newState)
     {
+        Debug.Log("Change State");
         if (currentState != null)
         {
             currentState.ExitState();
@@ -101,6 +102,59 @@ public class PlayerStateMachine
         public void ExitState()
         {
             Debug.Log("Exit Idle state");
+        }
+    }
+
+    public class AimState : IStates
+    {
+        GameObject owner;
+        PlayerController playerController;
+        public AimState(GameObject owner)
+        {
+            this.owner = owner;
+            playerController = owner.GetComponentInParent<PlayerController>();
+        }
+
+        public void EnterState()
+        {
+            Debug.Log("Enter Aim state");            
+        }
+
+        public void ExecuteState()
+        {
+        }
+
+        public void ExitState()
+        {
+            Debug.Log("Exit Aim state");
+        }
+    }
+
+    public class DeadState : IStates
+    {
+
+        GameObject owner;
+        PlayerController playerController;
+
+        public DeadState(GameObject owner)
+        {
+            this.owner = owner;
+            playerController = owner.GetComponent<PlayerController>();
+
+        }
+        public void EnterState()
+        {
+            playerController.Dead();
+            playerController.movementSpeed = 0;
+        }
+
+        public void ExecuteState()
+        {
+
+        }
+
+        public void ExitState()
+        {
         }
     }
 }

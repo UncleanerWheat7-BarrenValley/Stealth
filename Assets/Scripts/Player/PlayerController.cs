@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.AI;
 using static PlayerStateMachine;
 
 public class PlayerController : MonoBehaviour
@@ -6,7 +11,23 @@ public class PlayerController : MonoBehaviour
     public MyState myState;
     public Rigidbody rb;
     public GameObject model;
+    public GameObject enemyToAimAt;
     public float movementSpeed;
+
+    [SerializeField]
+    GameObject gunObj;
+
+    [SerializeField]
+    private AnimationHandler animationHandler;
+
+    public bool gunB
+    {
+        get { return gunB; }
+        set
+        {
+            gunObj.SetActive(!gunObj.activeSelf);
+        }
+    }
 
     private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
@@ -16,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     public enum MyState
     {
-        normal, crouch, wall
+        normal, crouch, wall, aim, dead
     }
 
     private void Awake()
@@ -24,7 +45,7 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main.transform;
-        UpdateCurrentState();
+        SetState(myState);
     }
 
     // Update is called once per frame
@@ -32,9 +53,16 @@ public class PlayerController : MonoBehaviour
     {
         float tick = Time.deltaTime;
         ApplyInputMovement();
-        handlePlayerRotation(tick);
-        HandleWallHug();
+        HandlePlayerRotation(tick);
+        //HandleWallHug();
         playerStateMachine.Update();
+        //        HandleAutoAim();
+    }
+
+    public void SetState(MyState newState)
+    {
+        myState = newState;
+        UpdateCurrentState();
     }
 
     public void UpdateCurrentState()
@@ -51,10 +79,57 @@ public class PlayerController : MonoBehaviour
         {
             playerStateMachine.ChangeState(new WallState(this.gameObject));
         }
+        else if (myState == MyState.aim)
+        {
+            playerStateMachine.ChangeState(new AimState(this.gameObject));
+            HandleAutoAim();
+        }
+        else if (myState == MyState.dead)
+        {
+            playerStateMachine.ChangeState(new DeadState(this.gameObject));
+        }
+    }
+    public LayerMask enemyLayerMask;
+
+    private void HandleAutoAim()
+    {
+        enemyToAimAt = null;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 10, enemyLayerMask);
+
+        float distance = 20;
+        foreach (Collider enemy in hitColliders)
+        {
+            if (Vector3.Angle(enemy.transform.position - transform.position, transform.forward) < 30)
+            {
+                if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
+                {
+                    enemyToAimAt = enemy.gameObject;
+                    distance = Vector3.Distance(transform.position, enemy.transform.position);
+                }
+            }
+        }
+
+        if (enemyToAimAt != null)
+        {
+            transform.LookAt(enemyToAimAt.transform.position);
+        }
+    }
+
+
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position + Vector3.forward, 10);
     }
 
     private void ApplyInputMovement()
     {
+        if (myState is MyState.aim)
+        {
+            return;
+        }
+
         if (myState is not MyState.wall)
         {
             moveDirection = mainCamera.forward * playerInput.verticalInput;
@@ -78,11 +153,11 @@ public class PlayerController : MonoBehaviour
         GetComponent<Rigidbody>().velocity = projectedVelocity;
     }
 
-    private void handlePlayerRotation(float tick)
-    {        
+    private void HandlePlayerRotation(float tick)
+    {
         if (myState is MyState.wall) return;
 
-        Vector3 targetDir = (mainCamera.forward * playerInput.verticalInput) + (mainCamera.right * playerInput.horizontalInput);        
+        Vector3 targetDir = (mainCamera.forward * playerInput.verticalInput) + (mainCamera.right * playerInput.horizontalInput);
         targetDir.y = 0;
         targetDir.Normalize();
 
@@ -99,10 +174,10 @@ public class PlayerController : MonoBehaviour
 
     public void HandleWallHug()
     {
-        if (!playerInput.wallHugFlag)
+        if (myState is MyState.wall)
         {
             myState = MyState.normal;
-            UpdateCurrentState();
+            SetState(myState);
             return;
         }
 
@@ -111,7 +186,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, 1))
         {
             myState = MyState.wall;
-            UpdateCurrentState();
+            SetState(myState);
             AttachToWall(hitInfo);
         }
         else
@@ -131,5 +206,16 @@ public class PlayerController : MonoBehaviour
         Quaternion yRotQuaternion = Quaternion.Euler(0, yRot, 0);
         transform.position = hitInfo.point;
         transform.rotation = yRotQuaternion;
+    }
+
+    internal void Dead()
+    {
+        animationHandler.PlayDeath();
+        DisableSelf();
+    }
+
+    private void DisableSelf()
+    {
+        this.enabled = false;
     }
 }

@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class CameraController : MonoBehaviour
 {
     PlayerInput playerInput;
     public Transform target;  // the target the camera is orbiting around
+    public Transform targetAim;
     public float distance;  // distance from target
     public float sensitivity;  // mouse sensitivity
     public float minY;  // minimum Y angle
@@ -21,6 +25,11 @@ public class CameraController : MonoBehaviour
     }
 
     void LateUpdate()
+    {
+        NormalCameraFollow();
+    }
+
+    private void NormalCameraFollow()
     {
         currentX += playerInput.mouseX * sensitivity;
         currentY += playerInput.mouseY * sensitivity;

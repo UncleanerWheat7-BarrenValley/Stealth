@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FOV : MonoBehaviour
 {
@@ -9,17 +10,13 @@ public class FOV : MonoBehaviour
 
     public float fovValue;
     public float depthOfViewValue;
-    float angleValue;
     public LayerMask playerMask;
-    bool playerInFOV = false;
+    bool playerInFOV = false;    
 
     [Range(0, 100)] public float alertLevel;
     public void Awake()
     {
-        alertLevel = 0;
-
-        Vector3 directionToTarget = transform.position - new Vector3(transform.position.x + fovValue / 2, transform.position.y, transform.position.z + depthOfViewValue);
-        angleValue = Vector3.SignedAngle(-transform.forward, directionToTarget, Vector3.up);
+        alertLevel = 0;        
     }
 
     void Start()
@@ -48,6 +45,11 @@ public class FOV : MonoBehaviour
             );
     }
 
+    public bool PlayerInFOV()
+    {
+        return playerInFOV;
+    }
+
     void FindTarget()
     {
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, fovValue, playerMask);
@@ -57,10 +59,10 @@ public class FOV : MonoBehaviour
         bool distanceInRange = Vector3.Distance(transform.position, target.position) < depthOfViewValue;
         bool radiusInRange = Vector3.Angle(transform.forward, dirToTarget) < fovValue / 2;
 
-        if (!distanceInRange || !radiusInRange) 
+        if (!distanceInRange || !radiusInRange)
         {
             playerInFOV = false;
-            AlertCooldown();
+            AlertCooldown(2);
             return;
         }
 
@@ -75,10 +77,15 @@ public class FOV : MonoBehaviour
                     alertLevel += 50 / Vector3.Distance(transform.position, target.position);
                 }
             }
+            else 
+            {
+                playerInFOV = false;
+                AlertCooldown(1);
+            }
         }
     }
 
-    private async void AlertCooldown()
+    private async void AlertCooldown(int multipier)
     {
         while (alertLevel > 0)
         {
@@ -87,7 +94,7 @@ public class FOV : MonoBehaviour
                 break;
             }
 
-            alertLevel = Mathf.MoveTowards(alertLevel, 0, 5 * Time.deltaTime);
+            alertLevel = Mathf.MoveTowards(alertLevel, 0, multipier * Time.deltaTime);
 
             await Task.Yield();
         }

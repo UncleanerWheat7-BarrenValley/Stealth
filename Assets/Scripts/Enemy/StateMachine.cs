@@ -1,12 +1,14 @@
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class StateMachine
 {
     public IStates currentState;
-   
+
     public void ChangeState(IStates newState)
     {
+        Debug.Log("Changing State");
         if (currentState != null)
         {
             currentState.ExitState();
@@ -29,7 +31,7 @@ public class StateMachine
         GameObject owner;
         Enemy enemyScript;
         Patrol patrol;
-        public IdleState(GameObject owner) 
+        public IdleState(GameObject owner)
         {
             this.owner = owner;
             enemyScript = owner.GetComponent<Enemy>();
@@ -41,7 +43,7 @@ public class StateMachine
             enemyScript.UpdateMoveSpeed(0.3f);
             enemyScript.ChangeLightColour(new Color(0, 0, 1, 0));
 
-            if (patrol.patrolTransforms.Length > 0) 
+            if (patrol.patrolTransforms.Length > 0)
             {
                 enemyScript.StartPatrol();
             }
@@ -49,7 +51,7 @@ public class StateMachine
 
         public void ExecuteState()
         {
-            
+
         }
 
         public void ExitState()
@@ -77,7 +79,7 @@ public class StateMachine
 
         public void ExecuteState()
         {
-            
+
         }
 
         public void ExitState()
@@ -93,17 +95,18 @@ public class StateMachine
         Enemy enemyScript;
         public AlertState(GameObject owner)
         {
-            this.owner = owner;            
+            this.owner = owner;
             enemyScript = owner.GetComponent<Enemy>();
         }
         public void EnterState()
         {
-            enemyScript.ChangeLightColour(new Color(1,0,0,0));
+            enemyScript.ChangeLightColour(new Color(1, 0, 0, 0));
             enemyScript.UpdateMoveSpeed(1);
         }
 
         public void ExecuteState()
         {
+            enemyScript.UpdatePlayerShadow();
             enemyScript.MoveToPlayer();
         }
 
@@ -113,33 +116,72 @@ public class StateMachine
         }
     }
 
-    public class DeadState : IStates
+    public class FireState : IStates
     {
 
         GameObject owner;
         Enemy enemyScript;
-        
-        public DeadState(GameObject owner)
+        float timer = 1f;
+        public FireState(GameObject owner)
         {
             this.owner = owner;
             enemyScript = owner.GetComponent<Enemy>();
-            
         }
         public void EnterState()
         {
-            enemyScript.ChangeLightColour(new Color(0, 1, 0, 0));
-            
-            enemyScript.Dead();
-        
+            Debug.Log("Fire State");
+            enemyScript.ChangeLightColour(new Color(0.5f, 0.5f, 0, 0));
+            enemyScript.UpdateMoveSpeed(0);
+            enemyScript.FireGun(true);
         }
 
         public void ExecuteState()
         {
-            
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+            }
+            else
+            {
+                enemyScript.UpdatePlayerShadow();
+                enemyScript.AimAtPlayer();
+                timer = 0.5f;
+            }
         }
 
         public void ExitState()
-        {            
+        {
+            enemyScript.FireGun(false);
+            Debug.Log("Exit Fire state");
+        }
+    }
+
+    public class DeadState : IStates
+    {
+        GameObject owner;
+        Enemy enemyScript;
+
+        public DeadState(GameObject owner)
+        {
+            this.owner = owner;
+            enemyScript = owner.GetComponent<Enemy>();
+
+        }
+        public void EnterState()
+        {
+            enemyScript.ChangeLightColour(new Color(0, 1, 0, 0));
+
+            enemyScript.Dead();
+
+        }
+
+        public void ExecuteState()
+        {
+
+        }
+
+        public void ExitState()
+        {
         }
     }
 }

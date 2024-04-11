@@ -13,9 +13,12 @@ public class EnemyManager : MonoBehaviour, ICharacter
 
     public void Damage(int damage)
     {
+        if(enemy.myState == Enemy.MyState.dead) return;
+
         Health -= damage;
         if(Health <= 0) 
         {
+            
             enemy.SetState(Enemy.MyState.dead);
             return;
         }
