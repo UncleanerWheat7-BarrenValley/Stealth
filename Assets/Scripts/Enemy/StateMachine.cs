@@ -132,7 +132,7 @@ public class StateMachine
             Debug.Log("Fire State");
             enemyScript.ChangeLightColour(new Color(0.5f, 0.5f, 0, 0));
             enemyScript.UpdateMoveSpeed(0);
-            enemyScript.FireGun(true);
+            enemyScript.FireGun();
         }
 
         public void ExecuteState()

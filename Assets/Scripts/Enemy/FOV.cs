@@ -77,6 +77,10 @@ public class FOV : MonoBehaviour
                     alertLevel += 50 / Vector3.Distance(transform.position, target.position);
                 }
             }
+            else 
+            {
+                playerInFOV = false;
+            }
         }
     }
 
@@ -89,7 +93,7 @@ public class FOV : MonoBehaviour
                 break;
             }
 
-            alertLevel = Mathf.MoveTowards(alertLevel, 0, 5 * Time.deltaTime);
+            alertLevel = Mathf.MoveTowards(alertLevel, 0, 1 * Time.deltaTime);
 
             await Task.Yield();
         }

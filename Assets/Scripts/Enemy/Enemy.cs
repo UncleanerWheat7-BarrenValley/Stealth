@@ -168,9 +168,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void FireGun(bool fire)
+    public void FireGun()
     {
-        enemyAnimationHandler.PlayFire(fire);
+        enemyAnimationHandler.PlayFire(true);
     }
 
     public void AimAtPlayer()
