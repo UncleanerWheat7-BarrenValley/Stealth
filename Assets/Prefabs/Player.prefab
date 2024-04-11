@@ -57,6 +57,7 @@ MonoBehaviour:
   enemyToAimAt: {fileID: 0}
   movementSpeed: 5
   gunObj: {fileID: 1647338410820187811}
+  animationHandler: {fileID: 8827720645450695983}
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -147,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5a4f5e776956b44ba4ff6822f118a79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 3711815798815373172}
 --- !u!1 &4665518837424332827
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,7 +534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3763604498974455608, guid: 24293e33d3322f84bb98b6c032ce2dc9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2043,8 +2045,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2697950599367449ab83054d9ee2201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletStartPoint: {fileID: 4191813461596598450}
+  bulletStartPoint: {fileID: 2940443410489021569}
+  inaccurate: 0
+  randXEdge: 0
+  randYEdge: 0
   tagToHit: Enemy
+  bulletTrail: {fileID: 2676583602954685874, guid: e53d332c22ac36d46aabd6a3b155d640, type: 3}
 --- !u!4 &4577795394345574427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}

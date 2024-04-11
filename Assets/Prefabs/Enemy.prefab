@@ -159,9 +159,10 @@ MonoBehaviour:
   enemyAnimationHandler: {fileID: 8865613505599997520}
   navMeshAgent: {fileID: 21805652375653700}
   fov: {fileID: 5141091394348216485}
+  enemyManager: {fileID: 7823944095076314654}
   gun: {fileID: 8889114453869747280}
-  stateLight: {fileID: 7994240490617929047}
   playerTransform: {fileID: 0}
+  stateLight: {fileID: 7994240490617929047}
   currentMoveSpeed: 0
   myState: 0
 --- !u!114 &5141091394348216485
@@ -780,7 +781,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletStartPoint: {fileID: 1908877935659413885}
+  inaccurate: 0
+  randXEdge: 0
+  randYEdge: 0
   tagToHit: Player
+  bulletTrail: {fileID: 0}
 --- !u!4 &4577795394345574427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}

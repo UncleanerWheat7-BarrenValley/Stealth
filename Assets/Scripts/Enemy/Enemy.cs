@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private FOV fov;
     [SerializeField]
+    private EnemyManager enemyManager;
+    [SerializeField]
     private Gun gun;
 
     
