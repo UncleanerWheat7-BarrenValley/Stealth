@@ -7,7 +7,7 @@ public class EnemyManager : MonoBehaviour, ICharacter
     [SerializeField]
     Enemy enemy;
     [SerializeField]
-    FOV fov;
+    Enemy enemyScript;
     public int Health { get; set; } = 5;
     public float moveSpeed { get; set; } = 5;
 
@@ -22,6 +22,6 @@ public class EnemyManager : MonoBehaviour, ICharacter
             enemy.SetState(Enemy.MyState.dead);
             return;
         }
-        fov.alertLevel = 100;
+        enemyScript.alertLevel = 100;
     }
 }

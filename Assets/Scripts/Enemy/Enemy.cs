@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using System.Collections;
 using UnityEngine.UIElements;
 using static PlayerManager;
+using System.Threading.Tasks;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
@@ -14,7 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private EnemyAnimationHandler enemyAnimationHandler;
     [SerializeField]
-    private NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
     [SerializeField]
     private FOV fov;
     [SerializeField]
@@ -22,7 +23,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Gun gun;
 
-    
+    [Range(0, 100)] public float alertLevel;
+
+
 
     private Vector3 randomPoint;
     private float topSpeed;
@@ -45,12 +48,14 @@ public class Enemy : MonoBehaviour
     private void OnEnable()
     {
         PlayerManager.playerDied += playerDied;
-        
+        Gun.shootSound += ShootSound;
+
     }
 
     private void OnDisable()
     {
         PlayerManager.playerDied -= playerDied;
+        Gun.shootSound -= ShootSound;
     }
 
     void Start()
@@ -58,7 +63,6 @@ public class Enemy : MonoBehaviour
         topSpeed = navMeshAgent.speed;
         SetState(myState);
         playerShadowTransformPosition = playerTransform.position;
-
     }
 
     private void Update()
@@ -68,27 +72,29 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        if (fov.alertLevel < 50)
+        if (alertLevel < 50)
         {
             if (stateMachine.currentState is not IdleState)
             {
                 stateMachine.ChangeState(new IdleState(this.gameObject));
             }
         }
-        else if (fov.alertLevel > 50 && fov.alertLevel < 75)
+        else if (alertLevel > 50 && alertLevel < 75)
         {
             if (stateMachine.currentState is not CautionState)
             {
                 stateMachine.ChangeState(new CautionState(this.gameObject));
             }
         }
-        else if (fov.alertLevel >= 75)
+        else if (alertLevel >= 75)
         {
             if (stateMachine.currentState is not AlertState && stateMachine.currentState is not FireState)
             {
                 stateMachine.ChangeState(new AlertState(this.gameObject));
             }
         }
+
+
         print(stateMachine.currentState);
         currentMoveSpeed = navMeshAgent.velocity.magnitude / topSpeed;//for animation speed
         stateMachine.Update();
@@ -165,9 +171,13 @@ public class Enemy : MonoBehaviour
         yield break;
     }
 
-    public void MoveToRandom()
+    public void Investigate()
     {
-        GetComponent<NavMeshAgent>().destination = randomPoint;
+        GetComponent<NavMeshAgent>().destination = playerShadowTransformPosition;
+    }
+    public void Investigate(Vector3 investigatePoistion)
+    {
+        GetComponent<NavMeshAgent>().destination = investigatePoistion;
     }
 
     public void UpdatePlayerShadow()
@@ -197,7 +207,7 @@ public class Enemy : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(playerShadowTransformPosition - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1f);
         }
-        else 
+        else
         {
             FireGun(false);
             SetState(MyState.alert);
@@ -229,9 +239,34 @@ public class Enemy : MonoBehaviour
         this.enabled = false;
     }
 
-    void playerDied() 
-    {        
-        fov.alertLevel = 0;
+    void playerDied()
+    {
+        alertLevel = 0;
         SetState(MyState.idle);
+    }
+
+    void ShootSound(Vector3 gunshotLocation)
+    {
+        if (Vector3.Distance(transform.position, gunshotLocation) < fov.fosValue)
+        {
+            print("I heard that");
+            alertLevel += 20 / Vector3.Distance(transform.position, gunshotLocation);
+            Investigate(gunshotLocation);
+        }
+    }
+
+    private async void AlertCooldown(float multipier)
+    {
+        while (alertLevel > 0)
+        {
+            if (fov.PlayerInFOV())
+            {
+                break;
+            }
+
+            alertLevel = Mathf.MoveTowards(alertLevel, 0, multipier * Time.deltaTime);
+
+            await Task.Yield();
+        }
     }
 }

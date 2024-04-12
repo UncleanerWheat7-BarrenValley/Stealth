@@ -1,24 +1,18 @@
 using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class FOV : MonoBehaviour
 {
     [SerializeField]
     EnemyManager enemyManager;
+    [SerializeField]
+    Enemy enemyScript;
 
     public float fovValue;
+    public float fosValue;
     public float depthOfViewValue;
     public LayerMask playerMask;
     bool playerInFOV = false;    
-
-    [Range(0, 100)] public float alertLevel;
-    public void Awake()
-    {
-        alertLevel = 0;        
-    }
-
     void Start()
     {
         StartCoroutine("FindTargetWithDelay", 0.2f);
@@ -62,7 +56,6 @@ public class FOV : MonoBehaviour
         if (!distanceInRange || !radiusInRange)
         {
             playerInFOV = false;
-            AlertCooldown(2);
             return;
         }
 
@@ -72,31 +65,15 @@ public class FOV : MonoBehaviour
             if (hitInfo.transform.tag == "Player")
             {
                 playerInFOV = true;
-                if (alertLevel < 100)
+                if (enemyScript.alertLevel < 100)
                 {
-                    alertLevel += 50 / Vector3.Distance(transform.position, target.position);
+                    enemyScript.alertLevel += 50 / Vector3.Distance(transform.position, target.position);
                 }
             }
             else 
             {
-                playerInFOV = false;
-                AlertCooldown(1);
+                playerInFOV = false;                
             }
-        }
-    }
-
-    private async void AlertCooldown(int multipier)
-    {
-        while (alertLevel > 0)
-        {
-            if (playerInFOV)
-            {
-                break;
-            }
-
-            alertLevel = Mathf.MoveTowards(alertLevel, 0, multipier * Time.deltaTime);
-
-            await Task.Yield();
         }
     }
 }

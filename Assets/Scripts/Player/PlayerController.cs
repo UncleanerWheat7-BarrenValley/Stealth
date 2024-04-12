@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.AI;
+using static PlayerManager;
 using static PlayerStateMachine;
-
 public class PlayerController : MonoBehaviour
 {
     public MyState myState;
@@ -47,16 +42,12 @@ public class PlayerController : MonoBehaviour
         mainCamera = Camera.main.transform;
         SetState(myState);
     }
-
-    // Update is called once per frame
     void Update()
     {
         float tick = Time.deltaTime;
         ApplyInputMovement();
-        HandlePlayerRotation(tick);
-        //HandleWallHug();
+        HandlePlayerRotation(tick);        
         playerStateMachine.Update();
-        //        HandleAutoAim();
     }
 
     public void SetState(MyState newState)
@@ -113,14 +104,6 @@ public class PlayerController : MonoBehaviour
         {
             transform.LookAt(enemyToAimAt.transform.position);
         }
-    }
-
-
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position + Vector3.forward, 10);
     }
 
     private void ApplyInputMovement()
@@ -197,7 +180,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
 
     private void AttachToWall(RaycastHit hitInfo)
     {

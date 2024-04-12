@@ -72,14 +72,17 @@ public class StateMachine
         public void EnterState()
         {
             enemyScript.ChangeLightColour(new Color(1, 0, 1, 0));
-            enemyScript.SelectRandomPoint();
-            enemyScript.MoveToRandom();
+            enemyScript.UpdatePlayerShadow();
+            enemyScript.Investigate();
             enemyScript.UpdateMoveSpeed(0.5f);
         }
 
         public void ExecuteState()
         {
-
+            if (Vector3.Distance(owner.transform.position, enemyScript.navMeshAgent.destination) < 0.1)
+            {
+                enemyScript.SetState(Enemy.MyState.idle);
+            }
         }
 
         public void ExitState()
