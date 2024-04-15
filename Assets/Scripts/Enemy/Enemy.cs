@@ -67,34 +67,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        //if (stateMachine == null)
-        //{
-        //    return;
-        //}
-
-        //if (alertLevel < 50)
-        //{
-        //    if (stateMachine.currentState is not IdleState)
-        //    {
-        //        stateMachine.ChangeState(new IdleState(this.gameObject));
-        //    }
-        //}
-        //else if (alertLevel > 50 && alertLevel < 75)
-        //{
-        //    if (stateMachine.currentState is not CautionState)
-        //    {
-        //        stateMachine.ChangeState(new CautionState(this.gameObject));
-        //    }
-        //}
-        //else if (alertLevel >= 75)
-        //{
-        //    if (stateMachine.currentState is not AlertState && stateMachine.currentState is not FireState)
-        //    {
-        //        stateMachine.ChangeState(new AlertState(this.gameObject));
-        //    }
-        //}
-
-
         print(stateMachine.currentState);
         currentMoveSpeed = navMeshAgent.velocity.magnitude / topSpeed;//for animation speed
         stateMachine.Update();
