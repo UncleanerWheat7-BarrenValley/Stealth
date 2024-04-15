@@ -2,20 +2,29 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.ProBuilder;
 using log4net.Util;
+using System;
 
 
+//[CustomEditor(typeof(FOV))]
 [CustomEditor(typeof(FOV))]
 public class EnemyManagerEditor : Editor
 {
-
-    ProBuilderMesh cone;
     private void OnSceneGUI()
     {
+        drawFOV();
+    }
+
+    private void drawFOV()
+    {
         FOV fov = (FOV)target;
+
         Vector3 pos = fov.transform.position + Vector3.up * 1.5f;
 
         Handles.color = new Color(1, 1, 1, 0.1f);
-        Handles.DrawSolidArc(pos, Vector3.up, fov.DirFromAngle(-fov.fovValue / 2), fov.fovValue, fov.depthOfViewValue);
+        Handles.DrawSolidArc(pos, Vector3.up, fov.DirFromAngle(-fov.fovValue / 2), fov.fovValue, fov.depthOfViewValue);        
+
+        Handles.color = new Color(1, 0, 1, 0.1f);
+        Handles.DrawSolidDisc(pos, Vector3.up, fov.fosValue);
 
         Handles.color = Color.red;
         fov.fovValue = Handles.ScaleValueHandle(
@@ -36,6 +45,5 @@ public class EnemyManagerEditor : Editor
             Handles.ArrowHandleCap,
             1
             );
-
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour, ICharacter
@@ -9,7 +7,6 @@ public class PlayerManager : MonoBehaviour, ICharacter
 
     public delegate void PlayerDeath();
     public static event PlayerDeath playerDied;
-
     public float moveSpeed { get; set; } = 5;
     public int Health { get; set; } = 5;
 

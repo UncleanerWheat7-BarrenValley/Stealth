@@ -1,13 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Gun : MonoBehaviour
 {
     [SerializeField]
     Transform bulletStartPoint;
-    [SerializeField] bool inaccurate;
+    [SerializeField]
+    private AudioSource audioSource;
+    [SerializeField] 
+    bool inaccurate;
+
     float randX = 0, randY = 0;
     public float randXEdge, randYEdge;
 
@@ -16,9 +18,15 @@ public class Gun : MonoBehaviour
     string tagToHit;
     [SerializeField]
     private TrailRenderer bulletTrail;
+    
+    public delegate void ShootSound(Vector3 location);
+    public static event ShootSound shootSound;
 
     public void FireGun()
     {
+        audioSource.Play();
+        shootSound(transform.position);
+
         if (inaccurate)
         {
             randX = Random.Range(-randXEdge, randXEdge);
