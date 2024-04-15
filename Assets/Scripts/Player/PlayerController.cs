@@ -1,5 +1,4 @@
 using UnityEngine;
-using static PlayerManager;
 using static PlayerStateMachine;
 public class PlayerController : MonoBehaviour
 {

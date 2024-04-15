@@ -2,8 +2,6 @@ using UnityEngine;
 using static StateMachine;
 using UnityEngine.AI;
 using System.Collections;
-using UnityEngine.UIElements;
-using static PlayerManager;
 using System.Threading.Tasks;
 
 [RequireComponent(typeof(NavMeshAgent))]
