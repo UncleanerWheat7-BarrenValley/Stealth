@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     public NavMeshAgent navMeshAgent;
     [SerializeField]
-    private FOV fov;
+    public FOV fov;
     [SerializeField]
     private EnemyManager enemyManager;
     [SerializeField]
@@ -40,6 +40,7 @@ public class Enemy : MonoBehaviour
     {
         idle,
         caution,
+        calming,
         alert,
         dead,
         fire
@@ -49,7 +50,6 @@ public class Enemy : MonoBehaviour
     {
         PlayerManager.playerDied += playerDied;
         Gun.shootSound += ShootSound;
-
     }
 
     private void OnDisable()
@@ -67,32 +67,32 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (stateMachine == null)
-        {
-            return;
-        }
+        //if (stateMachine == null)
+        //{
+        //    return;
+        //}
 
-        if (alertLevel < 50)
-        {
-            if (stateMachine.currentState is not IdleState)
-            {
-                stateMachine.ChangeState(new IdleState(this.gameObject));
-            }
-        }
-        else if (alertLevel > 50 && alertLevel < 75)
-        {
-            if (stateMachine.currentState is not CautionState)
-            {
-                stateMachine.ChangeState(new CautionState(this.gameObject));
-            }
-        }
-        else if (alertLevel >= 75)
-        {
-            if (stateMachine.currentState is not AlertState && stateMachine.currentState is not FireState)
-            {
-                stateMachine.ChangeState(new AlertState(this.gameObject));
-            }
-        }
+        //if (alertLevel < 50)
+        //{
+        //    if (stateMachine.currentState is not IdleState)
+        //    {
+        //        stateMachine.ChangeState(new IdleState(this.gameObject));
+        //    }
+        //}
+        //else if (alertLevel > 50 && alertLevel < 75)
+        //{
+        //    if (stateMachine.currentState is not CautionState)
+        //    {
+        //        stateMachine.ChangeState(new CautionState(this.gameObject));
+        //    }
+        //}
+        //else if (alertLevel >= 75)
+        //{
+        //    if (stateMachine.currentState is not AlertState && stateMachine.currentState is not FireState)
+        //    {
+        //        stateMachine.ChangeState(new AlertState(this.gameObject));
+        //    }
+        //}
 
 
         print(stateMachine.currentState);
@@ -116,6 +116,10 @@ public class Enemy : MonoBehaviour
         {
             stateMachine.ChangeState(new CautionState(this.gameObject));
         }
+        else if (myState == MyState.calming)
+        {
+            stateMachine.ChangeState(new CalmingState(this.gameObject));
+        }
         else if (myState == MyState.alert)
         {
             stateMachine.ChangeState(new AlertState(this.gameObject));
@@ -137,6 +141,7 @@ public class Enemy : MonoBehaviour
         NavMeshHit hit;
         NavMesh.SamplePosition(randomDirection, out hit, 10, 1);
         randomPoint = hit.position;
+        navMeshAgent.SetDestination(randomPoint);
     }
 
     public void StartPatrol()
@@ -172,13 +177,9 @@ public class Enemy : MonoBehaviour
     }
 
     public void Investigate()
-    {
-        GetComponent<NavMeshAgent>().destination = playerShadowTransformPosition;
-    }
-    public void Investigate(Vector3 investigatePoistion)
-    {
-        GetComponent<NavMeshAgent>().destination = investigatePoistion;
-    }
+    {        
+        GetComponent<NavMeshAgent>().destination = playerShadowTransformPosition;        
+    }   
 
     public void UpdatePlayerShadow()
     {
@@ -250,12 +251,13 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, gunshotLocation) < fov.fosValue)
         {
             print("I heard that");
-            alertLevel += 20 / Vector3.Distance(transform.position, gunshotLocation);
-            Investigate(gunshotLocation);
+            alertLevel += 100 / Vector3.Distance(transform.position, gunshotLocation);
+            SetState(MyState.caution);
+            Investigate();
         }
     }
 
-    private async void AlertCooldown(float multipier)
+    public async void AlertCooldown(float multipier)
     {
         while (alertLevel > 0)
         {

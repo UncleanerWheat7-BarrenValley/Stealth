@@ -1,3 +1,4 @@
+using System.Threading;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.AI;
@@ -43,15 +44,20 @@ public class StateMachine
             enemyScript.UpdateMoveSpeed(0.3f);
             enemyScript.ChangeLightColour(new Color(0, 0, 1, 0));
 
-            if (patrol.patrolTransforms.Length > 0)
-            {
-                enemyScript.StartPatrol();
-            }
+
         }
 
         public void ExecuteState()
         {
+            if (patrol.patrolTransforms.Length > 0)
+            {
+                enemyScript.StartPatrol();
+            }
 
+            if (enemyScript.alertLevel > 10)
+            {
+                enemyScript.SetState(Enemy.MyState.caution);
+            }
         }
 
         public void ExitState()
@@ -81,6 +87,54 @@ public class StateMachine
         {
             if (Vector3.Distance(owner.transform.position, enemyScript.navMeshAgent.destination) < 0.1)
             {
+                enemyScript.SetState(Enemy.MyState.calming);
+            }
+
+            if (enemyScript.alertLevel > 70)
+            {
+                enemyScript.SetState(Enemy.MyState.alert);
+            }
+
+            if (enemyScript.alertLevel < 10)
+            {
+                enemyScript.SetState(Enemy.MyState.idle);
+            }
+        }
+
+        public void ExitState()
+        {
+            Debug.Log("Exit Caution state");
+        }
+    }
+
+    public class CalmingState : IStates
+    {
+        GameObject owner;
+        Enemy enemyScript;
+        public CalmingState(GameObject owner)
+        {
+            this.owner = owner;
+            enemyScript = owner.GetComponent<Enemy>();
+        }
+        public void EnterState()
+        {
+            enemyScript.AlertCooldown(1);
+        }
+
+        public void ExecuteState()
+        {
+            if (Vector3.Distance(owner.transform.position, enemyScript.navMeshAgent.destination) < 0.1)
+            {
+                enemyScript.SelectRandomPoint();
+            }
+
+            if (enemyScript.alertLevel > 70)
+            {
+                enemyScript.SetState(Enemy.MyState.alert);
+            }
+
+            if (enemyScript.alertLevel < 10)
+            {
                 enemyScript.SetState(Enemy.MyState.idle);
             }
         }
@@ -93,9 +147,11 @@ public class StateMachine
 
     public class AlertState : IStates
     {
-
         GameObject owner;
         Enemy enemyScript;
+
+        float timer = 5;
+        float temptTimer;
         public AlertState(GameObject owner)
         {
             this.owner = owner;
@@ -111,6 +167,20 @@ public class StateMachine
         {
             enemyScript.UpdatePlayerShadow();
             enemyScript.MoveToPlayer();
+
+            if (!enemyScript.fov.PlayerInFOV())
+            {
+                if (timer > 0)
+                {
+                    timer -= Time.deltaTime;
+                }
+                else
+                {
+
+                    enemyScript.alertLevel = 65;
+                    enemyScript.SetState(Enemy.MyState.calming);
+                }
+            }
         }
 
         public void ExitState()
@@ -121,7 +191,6 @@ public class StateMachine
 
     public class FireState : IStates
     {
-
         GameObject owner;
         Enemy enemyScript;
         float timer = 1f;

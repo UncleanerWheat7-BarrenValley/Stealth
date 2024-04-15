@@ -61,7 +61,6 @@ public class FOV : MonoBehaviour
 
         if (Physics.Linecast(transform.position, target.position, out RaycastHit hitInfo))
         {
-            print(hitInfo.transform.name);
             if (hitInfo.transform.tag == "Player")
             {
                 playerInFOV = true;
