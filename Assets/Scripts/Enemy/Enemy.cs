@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour
     {
         PlayerManager.playerDied += playerDied;
         Gun.shootSound += ShootSound;
+        Laser.laserPlayerDetected += Alarm;
     }
 
     private void OnDisable()
@@ -225,6 +226,12 @@ public class Enemy : MonoBehaviour
             SetState(MyState.caution);
             Investigate();
         }
+    }
+
+    void Alarm() 
+    {
+        alertLevel = 100;
+        SetState(MyState.alert);
     }
 
     public async void AlertCooldown(float multipier)
