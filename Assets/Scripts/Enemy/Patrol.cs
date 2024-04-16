@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Patrol : MonoBehaviour
 {
     public Transform[] patrolTransforms;
     public int currentWaypoint = 0;
     public int totalWaypointNumber = 0;
-    public float waypointWaitTime = 1;
+    public float waypointWaitTime;
 
     void Start()
     {
@@ -21,6 +22,6 @@ public class Patrol : MonoBehaviour
         else
         {
             currentWaypoint = 0;
-        }
+        }        
     }
 }

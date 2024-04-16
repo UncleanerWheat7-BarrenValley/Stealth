@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     private EnemyManager enemyManager;
     [SerializeField]
     private Gun gun;
+    float patrolTimer;
 
     [Range(0, 100)] public float alertLevel;
 
@@ -62,6 +63,7 @@ public class Enemy : MonoBehaviour
         topSpeed = navMeshAgent.speed;
         SetState(myState);
         playerShadowTransformPosition = playerTransform.position;
+        patrolTimer = patrol.waypointWaitTime;
     }
 
     private void Update()
@@ -120,37 +122,71 @@ public class Enemy : MonoBehaviour
         StartCoroutine("Patrol");
     }
 
+
     IEnumerator Patrol()
     {
-        Transform waypoint;
-        while (stateMachine.currentState is IdleState)
+        Transform waypoint;       
+
+        print("Enemy pos : " + transform.position);
+        print("Enemy Goal Pos : " + patrol.patrolTransforms[patrol.currentWaypoint].position);
+
+        float distanceToWaypoint = Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position);
+
+        if (distanceToWaypoint > 1)
         {
-            waypoint = patrol.patrolTransforms[patrol.currentWaypoint];
-            if (Vector3.Distance(navMeshAgent.transform.position, waypoint.position) < 0.1 ? true : false)
-            {
-                float waitTime = patrol.waypointWaitTime;
-
-                float t = 0;
-                while (t < 1)
-                {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, waypoint.rotation, t * 0.1f);
-                    t += Time.deltaTime;
-                    yield return null;
-                }
-
-                yield return new WaitForSeconds(waitTime);
-                patrol.UpdateWayPoint();
-            }
-            GetComponent<NavMeshAgent>().destination = waypoint.position;
-            yield return null;
+            GetComponent<NavMeshAgent>().destination = patrol.patrolTransforms[patrol.currentWaypoint].position;
         }
+        else 
+        {            
+            print("I am here ");
+            if (patrolTimer > 0)
+            {
+                patrolTimer -= Time.deltaTime;
+            }
+            else 
+            {
+                patrol.UpdateWayPoint();
+                patrolTimer = patrol.waypointWaitTime;
+            }            
+        }
+
+
+
+        //while (stateMachine.currentState is IdleState)
+        //{
+        //    waypoint = patrol.patrolTransforms[patrol.currentWaypoint];
+            
+        //    if (Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position) < 0.1)
+        //    {
+        //        float t = 0;
+        //        while (t < 1)
+        //        {
+        //            transform.rotation = Quaternion.Slerp(transform.rotation, waypoint.rotation, t * 0.1f);
+        //            t += Time.deltaTime;
+        //            yield return null;
+        //        }
+
+        //        while (waitTime > 0)
+        //        {
+        //            waitTime -= Time.deltaTime;
+        //            yield return null;
+        //        }
+        //        patrol.UpdateWayPoint();
+        //        waitTime = patrol.waypointWaitTime;
+        //    }
+        //    else
+        //    {
+        //        GetComponent<NavMeshAgent>().destination = waypoint.position;
+        //        yield return null;
+        //    }
+        //}
         yield break;
     }
 
     public void Investigate()
-    {        
-        GetComponent<NavMeshAgent>().destination = playerShadowTransformPosition;        
-    }   
+    {
+        GetComponent<NavMeshAgent>().destination = playerShadowTransformPosition;
+    }
 
     public void UpdatePlayerShadow()
     {
@@ -228,7 +264,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Alarm() 
+    void Alarm()
     {
         alertLevel = 100;
         SetState(MyState.alert);
