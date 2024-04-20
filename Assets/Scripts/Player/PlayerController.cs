@@ -1,33 +1,51 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static PlayerStateMachine;
+using static WeaponWheelButtonController;
 public class PlayerController : MonoBehaviour
 {
     public MyState myState;
     public Rigidbody rb;
     public GameObject model;
     public GameObject enemyToAimAt;
+
+
+    public static int weaponID;
+
     public float movementSpeed;
 
     [SerializeField]
     GameObject gunObj;
-
     [SerializeField]
-    private AnimationHandler animationHandler;
-
-    public bool gunB
-    {
-        get { return gunB; }
-        set
-        {
-            gunObj.SetActive(!gunObj.activeSelf);
-        }
-    }
+    AnimationHandler animationHandler;
+    [SerializeField]
+    weaponWheelController weaponWheelUI;
 
     private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
     Transform mainCamera;
     Vector3 moveDirection;
     Vector3 normalVector;
+    public LayerMask enemyLayerMask;
+    public bool gunB
+    {
+        get { return gunB; }
+        set
+        {
+            gunObj.SetActive(playerInput.gunFlag);
+        }
+    }
+
+    private void OnEnable()
+    {
+        selectedWeapon += SelectedWeapon;
+    }
+
+    private void OnDisable()
+    {
+        selectedWeapon -= SelectedWeapon;
+    }
 
     public enum MyState
     {
@@ -40,12 +58,13 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main.transform;
         SetState(myState);
+        SelectedWeapon();
     }
     void Update()
     {
         float tick = Time.deltaTime;
         ApplyInputMovement();
-        HandlePlayerRotation(tick);        
+        HandlePlayerRotation(tick);
         playerStateMachine.Update();
     }
 
@@ -79,7 +98,6 @@ public class PlayerController : MonoBehaviour
             playerStateMachine.ChangeState(new DeadState(this.gameObject));
         }
     }
-    public LayerMask enemyLayerMask;
 
     private void HandleAutoAim()
     {
@@ -198,5 +216,29 @@ public class PlayerController : MonoBehaviour
     private void DisableSelf()
     {
         this.enabled = false;
+    }
+
+    internal void OpenWeaponWheel()
+    {
+        weaponWheelUI.OpenWeaponWheel();
+    }
+
+    internal void CloseWeaponWheel()
+    {        
+        weaponWheelUI.OpenWeaponWheel();
+    }
+
+    void SelectedWeapon()
+    {
+        if (weaponID == 1)
+        {
+            playerInput.gunFlag = true;
+            gunB = true;
+        }
+        else
+        {
+            playerInput.gunFlag = false;
+            gunB = false;
+        }
     }
 }

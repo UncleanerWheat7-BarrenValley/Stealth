@@ -56,6 +56,7 @@ public class Enemy : MonoBehaviour
     {
         PlayerManager.playerDied -= playerDied;
         Gun.shootSound -= ShootSound;
+        Laser.laserPlayerDetected -= Alarm;
     }
 
     void Start()
@@ -125,10 +126,11 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Patrol()
     {
+        if(stateMachine.currentState is not IdleState) 
+        {
+            yield return null;
+        }
         Transform waypoint;       
-
-        print("Enemy pos : " + transform.position);
-        print("Enemy Goal Pos : " + patrol.patrolTransforms[patrol.currentWaypoint].position);
 
         float distanceToWaypoint = Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position);
 
@@ -150,36 +152,6 @@ public class Enemy : MonoBehaviour
             }            
         }
 
-
-
-        //while (stateMachine.currentState is IdleState)
-        //{
-        //    waypoint = patrol.patrolTransforms[patrol.currentWaypoint];
-            
-        //    if (Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position) < 0.1)
-        //    {
-        //        float t = 0;
-        //        while (t < 1)
-        //        {
-        //            transform.rotation = Quaternion.Slerp(transform.rotation, waypoint.rotation, t * 0.1f);
-        //            t += Time.deltaTime;
-        //            yield return null;
-        //        }
-
-        //        while (waitTime > 0)
-        //        {
-        //            waitTime -= Time.deltaTime;
-        //            yield return null;
-        //        }
-        //        patrol.UpdateWayPoint();
-        //        waitTime = patrol.waypointWaitTime;
-        //    }
-        //    else
-        //    {
-        //        GetComponent<NavMeshAgent>().destination = waypoint.position;
-        //        yield return null;
-        //    }
-        //}
         yield break;
     }
 
@@ -241,10 +213,15 @@ public class Enemy : MonoBehaviour
 
     private void DisableSelf()
     {
+        PlayerManager.playerDied -= playerDied;
+        Gun.shootSound -= ShootSound;
+        Laser.laserPlayerDetected -= Alarm;
+
         fov.enabled = false;
         navMeshAgent.enabled = false;
         patrol.enabled = false;
-        this.enabled = false;
+        enabled = false;
+        
     }
 
     void playerDied()

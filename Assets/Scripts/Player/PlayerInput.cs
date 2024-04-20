@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
@@ -14,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     public bool wallHugFlag;
     public bool gunFlag;
     public bool aimFlag;
+    public bool weaponWheelFlag;
 
     public float horizontalInput;
     public float verticalInput;
@@ -29,8 +31,9 @@ public class PlayerInput : MonoBehaviour
             controls = new Controls();
             controls.PlayerInput.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
             controls.PlayerInput.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
-            controls.PlayerActions.HugWall.performed += i => eInput = i.performed;
-            controls.PlayerActions.SelectGun.performed += i => twoInput = i.performed;
+
+            controls.PlayerActions.HugWall.performed += i => HandleEInput();          
+            controls.PlayerActions.WeaponWheel.performed += inputActions => HandleWeaponWheel();
             controls.PlayerInput.Fire1.performed += inputActions => Fire1();
         }
 
@@ -39,10 +42,16 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        TranslateInputMovement();
-        TranslateInputCamera();
-        HandleEInput();
-        HandleTwoInput();
+        Debug.LogWarning(weaponWheelFlag);
+        if (!weaponWheelFlag)
+        {
+            TranslateInputMovement();
+            TranslateInputCamera();
+        }
+        else 
+        {
+            horizontalInput = 0f; verticalInput = 0f; moveAmount = 0f; mouseX = 0f; mouseY = 0f;
+        }     
     }
 
     private void TranslateInputCamera()
@@ -59,26 +68,23 @@ public class PlayerInput : MonoBehaviour
     }
     private void HandleEInput()
     {
-        if (eInput)
-        {
-            wallHugFlag = !wallHugFlag;
-            playerController.HandleWallHug();
-            eInput = false;
-        }
+        wallHugFlag = !wallHugFlag;
+        playerController.HandleWallHug();
     }
-    private void HandleTwoInput()
+
+    private void HandleWeaponWheel()
     {
-        if (twoInput)
-        {
-            print(twoInput);
-            gunFlag = !gunFlag;
-            GetComponent<PlayerController>().gunB = gunFlag;
-            twoInput = false;
-        }
+        weaponWheelFlag = !weaponWheelFlag;
+        playerController.OpenWeaponWheel();
+
     }
 
     private void Fire1()
     {
+        if (weaponWheelFlag)
+        {
+            return;
+        }
         if (controls.PlayerInput.Fire1.IsPressed() && gunFlag)
         {
             print("aim");
@@ -93,7 +99,7 @@ public class PlayerInput : MonoBehaviour
             attack = true;
             playerController.SetState(PlayerController.MyState.normal);
         }
-        else if(controls.PlayerInput.Fire1.IsPressed() && !gunFlag)
+        else if (controls.PlayerInput.Fire1.IsPressed() && !gunFlag)
         {
             print("Fire");
             attack = true;
@@ -104,5 +110,4 @@ public class PlayerInput : MonoBehaviour
     {
         controls.Disable();
     }
-
 }

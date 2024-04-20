@@ -156,6 +156,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WeaponWheel"",
+                    ""type"": ""Button"",
+                    ""id"": ""4b4e9087-1184-478f-aef6-0fe9fefa6a6a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -180,6 +189,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""SelectGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf6a723d-2330-4a4d-8412-5cc33ce92d32"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WeaponWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -195,6 +215,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_HugWall = m_PlayerActions.FindAction("HugWall", throwIfNotFound: true);
         m_PlayerActions_SelectGun = m_PlayerActions.FindAction("SelectGun", throwIfNotFound: true);
+        m_PlayerActions_WeaponWheel = m_PlayerActions.FindAction("WeaponWheel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -320,12 +341,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IPlayerActionsActions> m_PlayerActionsActionsCallbackInterfaces = new List<IPlayerActionsActions>();
     private readonly InputAction m_PlayerActions_HugWall;
     private readonly InputAction m_PlayerActions_SelectGun;
+    private readonly InputAction m_PlayerActions_WeaponWheel;
     public struct PlayerActionsActions
     {
         private @Controls m_Wrapper;
         public PlayerActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @HugWall => m_Wrapper.m_PlayerActions_HugWall;
         public InputAction @SelectGun => m_Wrapper.m_PlayerActions_SelectGun;
+        public InputAction @WeaponWheel => m_Wrapper.m_PlayerActions_WeaponWheel;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -341,6 +364,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @SelectGun.started += instance.OnSelectGun;
             @SelectGun.performed += instance.OnSelectGun;
             @SelectGun.canceled += instance.OnSelectGun;
+            @WeaponWheel.started += instance.OnWeaponWheel;
+            @WeaponWheel.performed += instance.OnWeaponWheel;
+            @WeaponWheel.canceled += instance.OnWeaponWheel;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -351,6 +377,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @SelectGun.started -= instance.OnSelectGun;
             @SelectGun.performed -= instance.OnSelectGun;
             @SelectGun.canceled -= instance.OnSelectGun;
+            @WeaponWheel.started -= instance.OnWeaponWheel;
+            @WeaponWheel.performed -= instance.OnWeaponWheel;
+            @WeaponWheel.canceled -= instance.OnWeaponWheel;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -378,5 +407,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnHugWall(InputAction.CallbackContext context);
         void OnSelectGun(InputAction.CallbackContext context);
+        void OnWeaponWheel(InputAction.CallbackContext context);
     }
 }
