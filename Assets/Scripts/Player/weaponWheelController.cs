@@ -2,7 +2,7 @@ using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class weaponWheelController : MonoBehaviour
+public class WeaponWheelController : MonoBehaviour
 {
     public Animator anim;
     private bool weaponWheelSelected = false;
@@ -11,24 +11,27 @@ public class weaponWheelController : MonoBehaviour
     [SerializeField]
     PlayerController playerController;
 
+    public int weaponID;
+
     public void OpenWeaponWheel()
     {
         weaponWheelSelected = !weaponWheelSelected;
         anim.SetBool("OpenWeaponWheel", weaponWheelSelected);
     }
 
-    public void UpdateSelectedUI(int weaponID)
+    public void UpdateSelected(int ID)
     {
-        switch (weaponID)
+        switch (ID)
         {
             case 0:
+                weaponID = ID;
                 selectedItem.sprite = weaponImages[0];
+                playerController.SelectedWeapon();
                 break;
             case 1:
                 selectedItem.sprite = weaponImages[1];
+                playerController.SelectedWeapon();
                 break;
         }
-
-        OpenWeaponWheel();
     }
 }

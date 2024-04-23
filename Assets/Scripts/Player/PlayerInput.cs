@@ -15,7 +15,8 @@ public class PlayerInput : MonoBehaviour
     public bool wallHugFlag;
     public bool gunFlag;
     public bool aimFlag;
-    public bool weaponWheelFlag;
+    public bool weaponWheelFlag = false;
+    public bool crouchFlag = false;
 
     public float horizontalInput;
     public float verticalInput;
@@ -32,13 +33,16 @@ public class PlayerInput : MonoBehaviour
             controls.PlayerInput.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
             controls.PlayerInput.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
 
-            controls.PlayerActions.HugWall.performed += i => HandleEInput();          
+            controls.PlayerActions.HugWall.performed += i => HandleEInput();
             controls.PlayerActions.WeaponWheel.performed += inputActions => HandleWeaponWheel();
             controls.PlayerInput.Fire1.performed += inputActions => Fire1();
+            controls.PlayerActions.Crouch.performed += inputActions => HandleCrouch();
         }
 
         controls.Enable();
     }
+
+
 
     private void Update()
     {
@@ -48,10 +52,10 @@ public class PlayerInput : MonoBehaviour
             TranslateInputMovement();
             TranslateInputCamera();
         }
-        else 
+        else
         {
             horizontalInput = 0f; verticalInput = 0f; moveAmount = 0f; mouseX = 0f; mouseY = 0f;
-        }     
+        }
     }
 
     private void TranslateInputCamera()
@@ -74,9 +78,22 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleWeaponWheel()
     {
+        print(weaponWheelFlag);
         weaponWheelFlag = !weaponWheelFlag;
         playerController.OpenWeaponWheel();
+    }
 
+    private void HandleCrouch()
+    {
+        crouchFlag = !crouchFlag;
+        if (crouchFlag)
+        {
+            playerController.SetState(PlayerController.MyState.crouch);
+        }
+        else 
+        {
+            playerController.SetState(PlayerController.MyState.normal);
+        }
     }
 
     private void Fire1()

@@ -7,6 +7,8 @@ public class FOV : MonoBehaviour
     EnemyManager enemyManager;
     [SerializeField]
     Enemy enemyScript;
+    [SerializeField]
+    Transform eyePosition;
 
     public float fovValue;
     public float fosValue;
@@ -16,7 +18,7 @@ public class FOV : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine("FindTargetWithDelay", 0.2f);
+        StartCoroutine("FindTargetWithDelay", 0.2f);        
     }
 
     IEnumerator FindTargetWithDelay(float delay)
@@ -63,7 +65,7 @@ public class FOV : MonoBehaviour
             return;
         }
 
-        if (Physics.Linecast(transform.position, target.position, out RaycastHit hitInfo))
+        if (Physics.Linecast(eyePosition.position, target.position + Vector3.up * 0.9f, out RaycastHit hitInfo))
         {
             if (hitInfo.transform.tag == "Player")
             {

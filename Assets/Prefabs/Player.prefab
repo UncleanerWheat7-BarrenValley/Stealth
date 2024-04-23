@@ -59,6 +59,8 @@ MonoBehaviour:
   movementSpeed: 5
   gunObj: {fileID: 1647338410820187811}
   animationHandler: {fileID: 8827720645450695983}
+  collider: {fileID: 0}
+  weaponWheelUI: {fileID: 0}
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -81,6 +83,8 @@ MonoBehaviour:
   wallHugFlag: 0
   gunFlag: 0
   aimFlag: 0
+  weaponWheelFlag: 0
+  crouchFlag: 0
   horizontalInput: 0
   verticalInput: 0
   moveAmount: 0

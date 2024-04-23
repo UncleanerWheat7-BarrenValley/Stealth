@@ -9,10 +9,6 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public GameObject model;
     public GameObject enemyToAimAt;
-
-
-    public static int weaponID;
-
     public float movementSpeed;
 
     [SerializeField]
@@ -20,7 +16,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     AnimationHandler animationHandler;
     [SerializeField]
-    weaponWheelController weaponWheelUI;
+    CapsuleCollider collider;
+    [SerializeField]
+    WeaponWheelController weaponWheelController;
 
     private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
@@ -37,14 +35,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    public int weaponSelected 
     {
-        selectedWeapon += SelectedWeapon;
-    }
-
-    private void OnDisable()
-    {
-        selectedWeapon -= SelectedWeapon;
+        get { return weaponWheelController.weaponID; }
+        set { }
     }
 
     public enum MyState
@@ -220,17 +214,17 @@ public class PlayerController : MonoBehaviour
 
     internal void OpenWeaponWheel()
     {
-        weaponWheelUI.OpenWeaponWheel();
+        weaponWheelController.OpenWeaponWheel();
     }
 
     internal void CloseWeaponWheel()
-    {        
-        weaponWheelUI.OpenWeaponWheel();
+    {
+        weaponWheelController.OpenWeaponWheel();
     }
 
-    void SelectedWeapon()
+    public void SelectedWeapon()
     {
-        if (weaponID == 1)
+        if (weaponSelected == 1)
         {
             playerInput.gunFlag = true;
             gunB = true;
@@ -239,6 +233,22 @@ public class PlayerController : MonoBehaviour
         {
             playerInput.gunFlag = false;
             gunB = false;
+        }
+    }
+
+    internal void Crouch(bool crouched)
+    {
+        animationHandler.Crouch(crouched);
+
+        if (crouched)
+        {
+            collider.height = 0.9f;
+            collider.center = new Vector3(0, 0.5f, 0);
+        }
+        else 
+        {
+            collider.height = 1.8f;
+            collider.center = new Vector3(0, 0.9f, 0);
         }
     }
 }

@@ -5,7 +5,7 @@ using TMPro;
 public class WeaponWheelButtonController : MonoBehaviour
 {
     [SerializeField]
-    weaponWheelController weaponWheelController;
+    WeaponWheelController weaponWheelController;
     public int ID;
     private Animator anim;
     public string itemName;
@@ -13,25 +13,21 @@ public class WeaponWheelButtonController : MonoBehaviour
     public Image selectedItem;
     public Sprite icon;
 
-    public delegate void SelectedWeapon();
-    public static event SelectedWeapon selectedWeapon;    
-
     private void Start()
     {
         anim = GetComponent<Animator>();
-        weaponWheelController.UpdateSelectedUI(0);
+        weaponWheelController.UpdateSelected(0);
     }
 
     public void Selected()
     {
-        PlayerController.weaponID = ID;
-        weaponWheelController.UpdateSelectedUI(ID);
-        selectedWeapon();
+        weaponWheelController.weaponID = ID;
+        weaponWheelController.UpdateSelected(ID);        
     }
 
     public void Deselected()
     {
-        PlayerController.weaponID = 0;
+        weaponWheelController.weaponID = ID;
     }
 
     public void HoverEnter() 
