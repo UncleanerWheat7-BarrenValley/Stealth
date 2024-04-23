@@ -13,6 +13,11 @@ public class WeaponWheelController : MonoBehaviour
 
     public int weaponID;
 
+    private void Start()
+    {
+        UpdateSelected(0);
+    }
+
     public void OpenWeaponWheel()
     {
         weaponWheelSelected = !weaponWheelSelected;
