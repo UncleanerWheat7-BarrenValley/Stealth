@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static PlayerStateMachine;
+using static WeaponWheelButtonController;
 public class PlayerController : MonoBehaviour
 {
     public MyState myState;
@@ -10,24 +13,33 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     GameObject gunObj;
-
     [SerializeField]
-    private AnimationHandler animationHandler;
-
-    public bool gunB
-    {
-        get { return gunB; }
-        set
-        {
-            gunObj.SetActive(!gunObj.activeSelf);
-        }
-    }
+    AnimationHandler animationHandler;
+    [SerializeField]
+    CapsuleCollider collider;
+    [SerializeField]
+    WeaponWheelController weaponWheelController;
 
     private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
     Transform mainCamera;
     Vector3 moveDirection;
     Vector3 normalVector;
+    public LayerMask enemyLayerMask;
+    public bool gunB
+    {
+        get { return gunB; }
+        set
+        {
+            gunObj.SetActive(playerInput.gunFlag);
+        }
+    }
+
+    public int weaponSelected 
+    {
+        get { return weaponWheelController.weaponID; }
+        set { }
+    }
 
     public enum MyState
     {
@@ -40,12 +52,13 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main.transform;
         SetState(myState);
+        SelectedWeapon();
     }
     void Update()
     {
         float tick = Time.deltaTime;
         ApplyInputMovement();
-        HandlePlayerRotation(tick);        
+        HandlePlayerRotation(tick);
         playerStateMachine.Update();
     }
 
@@ -79,7 +92,6 @@ public class PlayerController : MonoBehaviour
             playerStateMachine.ChangeState(new DeadState(this.gameObject));
         }
     }
-    public LayerMask enemyLayerMask;
 
     private void HandleAutoAim()
     {
@@ -198,5 +210,45 @@ public class PlayerController : MonoBehaviour
     private void DisableSelf()
     {
         this.enabled = false;
+    }
+
+    internal void OpenWeaponWheel()
+    {
+        weaponWheelController.OpenWeaponWheel();
+    }
+
+    internal void CloseWeaponWheel()
+    {
+        weaponWheelController.OpenWeaponWheel();
+    }
+
+    public void SelectedWeapon()
+    {
+        if (weaponSelected == 1)
+        {
+            playerInput.gunFlag = true;
+            gunB = true;
+        }
+        else
+        {
+            playerInput.gunFlag = false;
+            gunB = false;
+        }
+    }
+
+    internal void Crouch(bool crouched)
+    {
+        animationHandler.Crouch(crouched);
+
+        if (crouched)
+        {
+            collider.height = 0.9f;
+            collider.center = new Vector3(0, 0.5f, 0);
+        }
+        else 
+        {
+            collider.height = 1.8f;
+            collider.center = new Vector3(0, 0.9f, 0);
+        }
     }
 }

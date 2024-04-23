@@ -9,6 +9,7 @@ public class AnimationHandler : MonoBehaviour
     int attack;
     int gunActive;
     int aim;
+    int crouch;
     int death;
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,7 @@ public class AnimationHandler : MonoBehaviour
         attack = Animator.StringToHash("Attack");
         gunActive = Animator.StringToHash("GunActive");
         aim = Animator.StringToHash("Aim");
+        crouch = Animator.StringToHash("Crouch");
         death = Animator.StringToHash("Death");
     }
    
@@ -30,11 +32,11 @@ public class AnimationHandler : MonoBehaviour
 
         if (playerInput.attack)
         {
-            Fire1(playerInput.gunFlag, playerInput.aimFlag);
+            Fire(playerInput.gunFlag, playerInput.aimFlag);
         }
     }
 
-    public void Fire1(bool gun, bool aiming)
+    public void Fire(bool gun, bool aiming)
     {
         animator.SetBool(gunActive, gun);
         animator.SetBool(attack, true);
@@ -56,6 +58,11 @@ public class AnimationHandler : MonoBehaviour
             other.GetComponent<EnemyManager>().Damage(1);
             Debug.LogWarning(other.GetComponent<EnemyManager>().Health);
         }
+    }
+
+    public void Crouch(bool crouched) 
+    {
+        animator.SetBool(crouch, crouched);
     }
 
     public void PlayDeath() 

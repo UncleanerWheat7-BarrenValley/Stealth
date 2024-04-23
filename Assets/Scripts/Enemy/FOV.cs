@@ -7,15 +7,18 @@ public class FOV : MonoBehaviour
     EnemyManager enemyManager;
     [SerializeField]
     Enemy enemyScript;
+    [SerializeField]
+    Transform eyePosition;
 
     public float fovValue;
     public float fosValue;
     public float depthOfViewValue;
     public LayerMask playerMask;
-    bool playerInFOV = false;    
+    bool playerInFOV = false;
+
     void Start()
     {
-        StartCoroutine("FindTargetWithDelay", 0.2f);
+        StartCoroutine("FindTargetWithDelay", 0.2f);        
     }
 
     IEnumerator FindTargetWithDelay(float delay)
@@ -47,6 +50,9 @@ public class FOV : MonoBehaviour
     void FindTarget()
     {
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, fovValue, playerMask);
+
+        if (targetsInViewRadius.Length <= 0) return;
+
         Transform target = targetsInViewRadius[0].transform;
         Vector3 dirToTarget = (target.position - transform.position).normalized;
 
@@ -59,7 +65,7 @@ public class FOV : MonoBehaviour
             return;
         }
 
-        if (Physics.Linecast(transform.position, target.position, out RaycastHit hitInfo))
+        if (Physics.Linecast(eyePosition.position, target.position + Vector3.up * 0.9f, out RaycastHit hitInfo))
         {
             if (hitInfo.transform.tag == "Player")
             {
@@ -69,9 +75,9 @@ public class FOV : MonoBehaviour
                     enemyScript.alertLevel += 50 / Vector3.Distance(transform.position, target.position);
                 }
             }
-            else 
+            else
             {
-                playerInFOV = false;                
+                playerInFOV = false;
             }
         }
     }

@@ -91,8 +91,9 @@ public class PlayerStateMachine
 
         public void EnterState()
         {
-            Debug.Log("Enter Idle state");
+            Debug.Log("Enter Crouch state");
             playerController.movementSpeed = 2;
+            playerController.Crouch(true);
         }
 
         public void ExecuteState()
@@ -101,7 +102,7 @@ public class PlayerStateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Idle state");
+            playerController.Crouch(false);
         }
     }
 
