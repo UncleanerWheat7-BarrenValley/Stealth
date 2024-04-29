@@ -30,12 +30,12 @@ public class EnemyWaypointEditor : Editor
             Handles.DrawDottedLine(transforms[i].position, transforms[i + 1].position, 10);
             Handles.DrawSolidArc(pos, Vector3.up, dir, 20, 1);
         }
-        
+
         Handles.DrawDottedLine(transforms[transforms.Length - 1].position, transforms[0].position, 10);
-        Handles.DrawSolidArc((transforms[transforms.Length - 1].position + transforms[0].position) / 2, 
-            Vector3.up, 
-            (transforms[transforms.Length - 1].position - transforms[0].position).normalized, 
-            20, 
+        Handles.DrawSolidArc((transforms[transforms.Length - 1].position + transforms[0].position) / 2,
+            Vector3.up,
+            (transforms[transforms.Length - 1].position - transforms[0].position).normalized,
+            20,
             1);
 
     }

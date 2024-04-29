@@ -317,7 +317,7 @@ MonoBehaviour:
   patrolTransforms: []
   currentWaypoint: 0
   totalWaypointNumber: 0
-  waypointWaitTime: 1
+  waypointWaitTime: 5
 --- !u!1 &4398975242240878384
 GameObject:
   m_ObjectHideFlags: 0
