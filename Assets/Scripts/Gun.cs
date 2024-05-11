@@ -7,6 +7,8 @@ public class Gun : MonoBehaviour
     Transform bulletStartPoint;
     [SerializeField]
     private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip gunFire;
     [SerializeField] 
     bool inaccurate;
 
@@ -24,6 +26,7 @@ public class Gun : MonoBehaviour
 
     public void FireGun()
     {
+        audioSource.GetComponent<AudioSource>().clip = gunFire;
         audioSource.Play();
         shootSound(transform.position);
 

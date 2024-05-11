@@ -149,15 +149,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SelectGun"",
-                    ""type"": ""Button"",
-                    ""id"": ""7bda9a6e-541f-4023-bf56-076e5862c654"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""WeaponWheel"",
                     ""type"": ""Button"",
                     ""id"": ""4b4e9087-1184-478f-aef6-0fe9fefa6a6a"",
@@ -174,6 +165,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WallKnock"",
+                    ""type"": ""Button"",
+                    ""id"": ""020df1ed-dcdd-4d69-97fd-9c0c66ef6498"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -185,17 +185,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""HugWall"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1f213896-2b50-4ffd-ad17-3ad5b6f1d691"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SelectGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -220,6 +209,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7dca57c-f7ac-412d-855e-4bdad88ac905"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WallKnock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -234,9 +234,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         // PlayerActions
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_HugWall = m_PlayerActions.FindAction("HugWall", throwIfNotFound: true);
-        m_PlayerActions_SelectGun = m_PlayerActions.FindAction("SelectGun", throwIfNotFound: true);
         m_PlayerActions_WeaponWheel = m_PlayerActions.FindAction("WeaponWheel", throwIfNotFound: true);
         m_PlayerActions_Crouch = m_PlayerActions.FindAction("Crouch", throwIfNotFound: true);
+        m_PlayerActions_WallKnock = m_PlayerActions.FindAction("WallKnock", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -361,17 +361,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerActions;
     private List<IPlayerActionsActions> m_PlayerActionsActionsCallbackInterfaces = new List<IPlayerActionsActions>();
     private readonly InputAction m_PlayerActions_HugWall;
-    private readonly InputAction m_PlayerActions_SelectGun;
     private readonly InputAction m_PlayerActions_WeaponWheel;
     private readonly InputAction m_PlayerActions_Crouch;
+    private readonly InputAction m_PlayerActions_WallKnock;
     public struct PlayerActionsActions
     {
         private @Controls m_Wrapper;
         public PlayerActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @HugWall => m_Wrapper.m_PlayerActions_HugWall;
-        public InputAction @SelectGun => m_Wrapper.m_PlayerActions_SelectGun;
         public InputAction @WeaponWheel => m_Wrapper.m_PlayerActions_WeaponWheel;
         public InputAction @Crouch => m_Wrapper.m_PlayerActions_Crouch;
+        public InputAction @WallKnock => m_Wrapper.m_PlayerActions_WallKnock;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -384,15 +384,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HugWall.started += instance.OnHugWall;
             @HugWall.performed += instance.OnHugWall;
             @HugWall.canceled += instance.OnHugWall;
-            @SelectGun.started += instance.OnSelectGun;
-            @SelectGun.performed += instance.OnSelectGun;
-            @SelectGun.canceled += instance.OnSelectGun;
             @WeaponWheel.started += instance.OnWeaponWheel;
             @WeaponWheel.performed += instance.OnWeaponWheel;
             @WeaponWheel.canceled += instance.OnWeaponWheel;
             @Crouch.started += instance.OnCrouch;
             @Crouch.performed += instance.OnCrouch;
             @Crouch.canceled += instance.OnCrouch;
+            @WallKnock.started += instance.OnWallKnock;
+            @WallKnock.performed += instance.OnWallKnock;
+            @WallKnock.canceled += instance.OnWallKnock;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -400,15 +400,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @HugWall.started -= instance.OnHugWall;
             @HugWall.performed -= instance.OnHugWall;
             @HugWall.canceled -= instance.OnHugWall;
-            @SelectGun.started -= instance.OnSelectGun;
-            @SelectGun.performed -= instance.OnSelectGun;
-            @SelectGun.canceled -= instance.OnSelectGun;
             @WeaponWheel.started -= instance.OnWeaponWheel;
             @WeaponWheel.performed -= instance.OnWeaponWheel;
             @WeaponWheel.canceled -= instance.OnWeaponWheel;
             @Crouch.started -= instance.OnCrouch;
             @Crouch.performed -= instance.OnCrouch;
             @Crouch.canceled -= instance.OnCrouch;
+            @WallKnock.started -= instance.OnWallKnock;
+            @WallKnock.performed -= instance.OnWallKnock;
+            @WallKnock.canceled -= instance.OnWallKnock;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -435,8 +435,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public interface IPlayerActionsActions
     {
         void OnHugWall(InputAction.CallbackContext context);
-        void OnSelectGun(InputAction.CallbackContext context);
         void OnWeaponWheel(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnWallKnock(InputAction.CallbackContext context);
     }
 }

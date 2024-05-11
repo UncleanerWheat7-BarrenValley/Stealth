@@ -20,11 +20,12 @@ public class Enemy : MonoBehaviour
     private EnemyManager enemyManager;
     [SerializeField]
     private Gun gun;
+    [SerializeField]
+    private BreadCrumb breadCrumb;
+
     float patrolTimer;
 
     [Range(0, 100)] public float alertLevel;
-
-
 
     private Vector3 randomPoint;
     private float topSpeed;
@@ -42,7 +43,8 @@ public class Enemy : MonoBehaviour
         calming,
         alert,
         dead,
-        fire
+        fire,
+        follow
     }
 
     private void OnEnable()
@@ -50,6 +52,7 @@ public class Enemy : MonoBehaviour
         PlayerManager.playerDied += playerDied;
         Gun.shootSound += ShootSound;
         Laser.laserPlayerDetected += Alarm;
+        WallKnock.knockSound += ShootSound;
     }
 
     private void OnDisable()
@@ -57,6 +60,7 @@ public class Enemy : MonoBehaviour
         PlayerManager.playerDied -= playerDied;
         Gun.shootSound -= ShootSound;
         Laser.laserPlayerDetected -= Alarm;
+        WallKnock.knockSound -= ShootSound;
     }
 
     void Start()
@@ -86,6 +90,10 @@ public class Enemy : MonoBehaviour
         {
             stateMachine.ChangeState(new IdleState(this.gameObject));
         }
+        else if (myState == MyState.follow)
+        {
+            stateMachine.ChangeState(new FollowState(this.gameObject));
+        }
         else if (myState == MyState.caution)
         {
             stateMachine.ChangeState(new CautionState(this.gameObject));
@@ -106,6 +114,7 @@ public class Enemy : MonoBehaviour
         {
             stateMachine.ChangeState(new FireState(this.gameObject));
         }
+
     }
 
     public void SelectRandomPoint()
@@ -126,11 +135,11 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Patrol()
     {
-        if(stateMachine.currentState is not IdleState) 
+        if (stateMachine.currentState is not IdleState)
         {
             yield return null;
         }
-        Transform waypoint;       
+        Transform waypoint;
 
         float distanceToWaypoint = Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position);
 
@@ -138,18 +147,18 @@ public class Enemy : MonoBehaviour
         {
             GetComponent<NavMeshAgent>().destination = patrol.patrolTransforms[patrol.currentWaypoint].position;
         }
-        else 
-        {            
+        else
+        {
             print("I am here ");
             if (patrolTimer > 0)
             {
                 patrolTimer -= Time.deltaTime;
             }
-            else 
+            else
             {
                 patrol.UpdateWayPoint();
                 patrolTimer = patrol.waypointWaitTime;
-            }            
+            }
         }
 
         yield break;
@@ -221,7 +230,7 @@ public class Enemy : MonoBehaviour
         navMeshAgent.enabled = false;
         patrol.enabled = false;
         enabled = false;
-        
+
     }
 
     void playerDied()
@@ -245,6 +254,19 @@ public class Enemy : MonoBehaviour
     {
         alertLevel = 100;
         SetState(MyState.alert);
+    }
+
+    public void SetBreadCrumbGoal()
+    {
+        if (breadCrumb.followFootprintList.Count > 0)
+        {
+            navMeshAgent.destination = breadCrumb.followFootprintList[0].transform.position;
+        }
+    }
+
+    public void RemoveCurrentBreadcrumb()
+    {
+        breadCrumb.UpdateBreadCrumb();
     }
 
     public async void AlertCooldown(float multipier)

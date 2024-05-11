@@ -2056,6 +2056,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1463066368011794270}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3600164477761019147}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4554248489616008532}
   m_SourcePrefab: {fileID: 100100000, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}
 --- !u!4 &2791941144801872211 stripped
 Transform:
@@ -2138,6 +2144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletStartPoint: {fileID: 2940443410489021569}
   audioSource: {fileID: 1463066368011794270}
+  gunFire: {fileID: 8300000, guid: 96434fb9d0ba9d14292e6d36365b6105, type: 3}
   inaccurate: 0
   randXEdge: 0
   randYEdge: 0
@@ -2239,6 +2246,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3600164477761019147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3804494970272053921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ca9c53594951042add3c7cd40857ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 1463066368011794270}
+  knockSoundClip: {fileID: 8300000, guid: 3875c9e2f11e8ac4fb7fd33a78523eee, type: 3}
+--- !u!114 &4554248489616008532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3804494970272053921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a9ecfa0f4e8638408223003880816e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footPrint: {fileID: 6271985878706671785, guid: 0ddd39acd4df9194a87d29ecac1ae107, type: 3}
 --- !u!4 &4577795394345574427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}
