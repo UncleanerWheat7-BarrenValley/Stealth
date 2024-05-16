@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
     private BreadCrumb breadCrumb;
 
     float patrolTimer;
+    float distanceToWaypoint;
 
     [Range(0, 100)] public float alertLevel;
 
@@ -86,11 +87,7 @@ public class Enemy : MonoBehaviour
 
     private void UpdateCurrentState()
     {
-        if (myState == MyState.idle)
-        {
-            stateMachine.ChangeState(new IdleState(this.gameObject));
-        }
-        else if (myState == MyState.follow)
+        if (myState == MyState.follow)
         {
             stateMachine.ChangeState(new FollowState(this.gameObject));
         }
@@ -113,6 +110,10 @@ public class Enemy : MonoBehaviour
         else if (myState == MyState.fire)
         {
             stateMachine.ChangeState(new FireState(this.gameObject));
+        }
+        else
+        {
+            stateMachine.ChangeState(new IdleState(this.gameObject));
         }
 
     }
@@ -137,11 +138,11 @@ public class Enemy : MonoBehaviour
     {
         if (stateMachine.currentState is not IdleState)
         {
-            yield return null;
+            yield break;
         }
-        Transform waypoint;
 
-        float distanceToWaypoint = Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position);
+        Transform waypoint;
+        distanceToWaypoint = Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position);
 
         if (distanceToWaypoint > 1)
         {
@@ -160,7 +161,6 @@ public class Enemy : MonoBehaviour
                 patrolTimer = patrol.waypointWaitTime;
             }
         }
-
         yield break;
     }
 
@@ -260,13 +260,8 @@ public class Enemy : MonoBehaviour
     {
         if (breadCrumb.followFootprintList.Count > 0)
         {
-            navMeshAgent.destination = breadCrumb.followFootprintList[0].transform.position;
+            navMeshAgent.destination = breadCrumb.followFootprintList[0];
         }
-    }
-
-    public void RemoveCurrentBreadcrumb()
-    {
-        breadCrumb.UpdateBreadCrumb();
     }
 
     public async void AlertCooldown(float multipier)

@@ -12,107 +12,70 @@ public class BreadCrumb : MonoBehaviour
     [SerializeField]
     Enemy enemyScript;
 
-    public List<GameObject> allFootprintList = new List<GameObject>();
-    public List<GameObject> followFootprintList = new List<GameObject>();
+    public bool follow = false;
+    Vector3 destinationPos;
 
-    bool followB = false;
+    [SerializeField]
+    public List<Vector3> followFootprintList = new List<Vector3>();
 
-    private void OnEnable()
+    public void AddFootprint(Vector3 footprint)
     {
-        footPlacement += AddFootprintToList;
-        footRemoval += DestroyOneFootprint;
+        followFootprintList.Add(footprint);
     }
 
-    private void OnDisable()
+    public void StartToTrail(Vector3 footprint)
     {
-        footPlacement -= AddFootprintToList;
-        footRemoval -= DestroyOneFootprint;
+        destinationPos = followFootprintList.Count > 0 ? followFootprintList[0] : Vector3.zero;
+        follow = true;
+        StartCoroutine("FollowBreadcrumbs", 1);
+        enemyScript.SetState(Enemy.MyState.follow);
+        enemyScript.navMeshAgent.destination = destinationPos;
     }
 
-
-    void Start()
+    IEnumerator FollowBreadcrumbs(float delay)
     {
-        StartCoroutine("CheckBreadcrumbs", 1);
-    }
-
-    IEnumerator CheckBreadcrumbs(float delay)
-    {
-        while (!followB)
+        while (follow && followFootprintList.Count > 0)
         {
+            destinationPos = followFootprintList.Count > 0 ? followFootprintList[0] : Vector3.zero;
+            if (enemyScript.alertLevel > 20)
+            {
+                follow = false;
+            }
+
+            print(Vector3.Distance(transform.position, destinationPos));
+
+            if (Vector3.Distance(transform.position, destinationPos) < 0.5f)
+            {
+                followFootprintList.Remove(followFootprintList[0]);
+
+                enemyScript.navMeshAgent.destination = destinationPos;
+                yield return new WaitForSeconds(delay);
+            }
+
+            if (followFootprintList.Count == 0)
+            {
+                follow = false;
+                enemyScript.SetState(Enemy.MyState.idle);
+                yield break;
+            }
+
+
             yield return new WaitForSeconds(delay);
-            CheckForBreadcrumbs();
         }
+
+        follow = false;
+        enemyScript.SetState(Enemy.MyState.idle);
+
+        followFootprintList.Clear();
         yield break;
     }
 
-    private void CheckForBreadcrumbs()
+    public void ClearFootprintIfExists(Vector3 footprint)
     {
-        foreach (var footprint in allFootprintList)
+        if (followFootprintList.Contains(footprint))
         {
-            Vector3 dirToTarget = (footprint.transform.position - transform.position).normalized;
-            var a = Vector3.Distance(transform.position, footprint.transform.position);
-            bool distanceInRange = Vector3.Distance(transform.position, footprint.transform.position) < 20;
-            bool radiusInRange = Vector3.Angle(transform.forward, dirToTarget) < 45 / 2;
-
-            if (distanceInRange)
-            {
-                followB = true;
-                foreach (var eachFootprint in allFootprintList)
-                {
-                   
-                }
-                enemyScript.SetState(Enemy.MyState.follow);
-            }
-        }
-    }
-
-    private void Update()
-    {
-        print(followB);
-    }
-
-    public void AddFootprintToList(GameObject footprint)
-    {
-        allFootprintList.Add(footprint);
-        if (followB)
-        {
-            followFootprintList.Add(footprint);
-        }
-    }
-
-    public void UpdateBreadCrumb()
-    {
-        if (followFootprintList.Count > 1)
-        {
-            followFootprintList.Remove(followFootprintList[0]);
-            agent.destination = followFootprintList[0].transform.position;
-        }
-        else
-        {
-            DestroyBreadCrumbs();
+            follow = false;
             enemyScript.SetState(Enemy.MyState.idle);
         }
-    }
-
-    public void DestroyOneFootprint(GameObject destroyedFootprint)
-    {
-        allFootprintList.Remove(destroyedFootprint);
-
-        if (followFootprintList.Count > 0)
-        {
-            if (destroyedFootprint == followFootprintList[0])
-            {
-                followB = false;
-            }
-        }
-
-        followFootprintList.Remove(destroyedFootprint);
-
-    }
-
-    private void DestroyBreadCrumbs()
-    {
-        allFootprintList.Clear();
-        followFootprintList.Clear(); ;
     }
 }

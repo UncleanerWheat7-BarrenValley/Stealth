@@ -1,13 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Destroy : MonoBehaviour
 {
-    public delegate void FootRemoval(GameObject foot);
+    public delegate void FootRemoval(Vector3 foot);
     public static event FootRemoval footRemoval;
-    private void OnDestroy()
+
+    private void Start()
     {
-        footRemoval(this.gameObject);
+        Invoke("EndFootprint", 20);
+    }
+
+    private void EndFootprint()
+    {
+        footRemoval(this.gameObject.transform.position);
+        Destroy(gameObject);
     }
 }
