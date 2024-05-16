@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class StateMachine
@@ -247,6 +248,38 @@ public class StateMachine
         public void ExecuteState()
         {
 
+        }
+
+        public void ExitState()
+        {
+        }
+    }
+
+    public class FollowState : IStates
+    {
+        GameObject owner;
+        Enemy enemyScript;
+
+        public FollowState(GameObject owner)
+        {
+            this.owner = owner;
+            enemyScript = owner.GetComponent<Enemy>();
+
+        }
+        public void EnterState()
+        {
+            enemyScript.ChangeLightColour(new Color(1, 0.25f, 0, 0));
+            enemyScript.SetBreadCrumbGoal();
+            enemyScript.UpdateMoveSpeed(0.3f);
+            Debug.Log("I Follow");
+        }
+
+        public void ExecuteState()
+        {            
+            if (Vector3.Distance(owner.transform.position, enemyScript.navMeshAgent.destination) < 0.1f)
+            {                
+                enemyScript.SetBreadCrumbGoal();
+            }
         }
 
         public void ExitState()

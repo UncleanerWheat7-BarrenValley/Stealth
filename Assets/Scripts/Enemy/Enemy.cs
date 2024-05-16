@@ -20,11 +20,13 @@ public class Enemy : MonoBehaviour
     private EnemyManager enemyManager;
     [SerializeField]
     private Gun gun;
+    [SerializeField]
+    private BreadCrumb breadCrumb;
+
     float patrolTimer;
+    float distanceToWaypoint;
 
     [Range(0, 100)] public float alertLevel;
-
-
 
     private Vector3 randomPoint;
     private float topSpeed;
@@ -42,7 +44,8 @@ public class Enemy : MonoBehaviour
         calming,
         alert,
         dead,
-        fire
+        fire,
+        follow
     }
 
     private void OnEnable()
@@ -50,6 +53,7 @@ public class Enemy : MonoBehaviour
         PlayerManager.playerDied += playerDied;
         Gun.shootSound += ShootSound;
         Laser.laserPlayerDetected += Alarm;
+        WallKnock.knockSound += ShootSound;
     }
 
     private void OnDisable()
@@ -57,6 +61,7 @@ public class Enemy : MonoBehaviour
         PlayerManager.playerDied -= playerDied;
         Gun.shootSound -= ShootSound;
         Laser.laserPlayerDetected -= Alarm;
+        WallKnock.knockSound -= ShootSound;
     }
 
     void Start()
@@ -82,9 +87,9 @@ public class Enemy : MonoBehaviour
 
     private void UpdateCurrentState()
     {
-        if (myState == MyState.idle)
+        if (myState == MyState.follow)
         {
-            stateMachine.ChangeState(new IdleState(this.gameObject));
+            stateMachine.ChangeState(new FollowState(this.gameObject));
         }
         else if (myState == MyState.caution)
         {
@@ -106,6 +111,11 @@ public class Enemy : MonoBehaviour
         {
             stateMachine.ChangeState(new FireState(this.gameObject));
         }
+        else
+        {
+            stateMachine.ChangeState(new IdleState(this.gameObject));
+        }
+
     }
 
     public void SelectRandomPoint()
@@ -126,32 +136,31 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Patrol()
     {
-        if(stateMachine.currentState is not IdleState) 
+        if (stateMachine.currentState is not IdleState)
         {
-            yield return null;
+            yield break;
         }
-        Transform waypoint;       
 
-        float distanceToWaypoint = Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position);
+        Transform waypoint;
+        distanceToWaypoint = Vector3.Distance(transform.position, patrol.patrolTransforms[patrol.currentWaypoint].position);
 
         if (distanceToWaypoint > 1)
         {
             GetComponent<NavMeshAgent>().destination = patrol.patrolTransforms[patrol.currentWaypoint].position;
         }
-        else 
-        {            
+        else
+        {
             print("I am here ");
             if (patrolTimer > 0)
             {
                 patrolTimer -= Time.deltaTime;
             }
-            else 
+            else
             {
                 patrol.UpdateWayPoint();
                 patrolTimer = patrol.waypointWaitTime;
-            }            
+            }
         }
-
         yield break;
     }
 
@@ -221,7 +230,7 @@ public class Enemy : MonoBehaviour
         navMeshAgent.enabled = false;
         patrol.enabled = false;
         enabled = false;
-        
+
     }
 
     void playerDied()
@@ -245,6 +254,14 @@ public class Enemy : MonoBehaviour
     {
         alertLevel = 100;
         SetState(MyState.alert);
+    }
+
+    public void SetBreadCrumbGoal()
+    {
+        if (breadCrumb.followFootprintList.Count > 0)
+        {
+            navMeshAgent.destination = breadCrumb.followFootprintList[0];
+        }
     }
 
     public async void AlertCooldown(float multipier)

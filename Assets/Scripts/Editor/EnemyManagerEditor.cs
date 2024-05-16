@@ -1,11 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.ProBuilder;
-using log4net.Util;
-using System;
 
-
-//[CustomEditor(typeof(FOV))]
 [CustomEditor(typeof(FOV))]
 public class EnemyManagerEditor : Editor
 {

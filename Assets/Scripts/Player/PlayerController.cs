@@ -251,4 +251,17 @@ public class PlayerController : MonoBehaviour
             collider.center = new Vector3(0, 0.9f, 0);
         }
     }
+
+    internal void HandleWallKnock()
+    {
+        if (myState is not MyState.wall)
+        {
+            myState = MyState.normal;
+            SetState(myState);
+            return;
+        }
+
+        animationHandler.WallKnock();
+
+    }
 }

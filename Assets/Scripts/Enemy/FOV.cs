@@ -15,10 +15,11 @@ public class FOV : MonoBehaviour
     public float depthOfViewValue;
     public LayerMask playerMask;
     bool playerInFOV = false;
+    CapsuleCollider playerCapsuleCollider;
 
     void Start()
     {
-        StartCoroutine("FindTargetWithDelay", 0.2f);        
+        StartCoroutine("FindTargetWithDelay", 0.2f);
     }
 
     IEnumerator FindTargetWithDelay(float delay)
@@ -54,6 +55,13 @@ public class FOV : MonoBehaviour
         if (targetsInViewRadius.Length <= 0) return;
 
         Transform target = targetsInViewRadius[0].transform;
+
+        if (playerCapsuleCollider == null)
+        {
+            playerCapsuleCollider = target.GetComponent<CapsuleCollider>();
+        }
+
+
         Vector3 dirToTarget = (target.position - transform.position).normalized;
 
         bool distanceInRange = Vector3.Distance(transform.position, target.position) < depthOfViewValue;
@@ -65,7 +73,9 @@ public class FOV : MonoBehaviour
             return;
         }
 
-        if (Physics.Linecast(eyePosition.position, target.position + Vector3.up * 0.9f, out RaycastHit hitInfo))
+        Debug.DrawLine(eyePosition.position, target.position + Vector3.up * playerCapsuleCollider.height * 0.8f, Color.red, 1);
+
+        if (Physics.Linecast(eyePosition.position, target.position + Vector3.up * playerCapsuleCollider.height * 0.8f, out RaycastHit hitInfo))
         {
             if (hitInfo.transform.tag == "Player")
             {

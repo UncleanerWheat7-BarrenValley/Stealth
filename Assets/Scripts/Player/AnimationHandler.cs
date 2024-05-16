@@ -10,6 +10,7 @@ public class AnimationHandler : MonoBehaviour
     int gunActive;
     int aim;
     int crouch;
+    int wallKnock;
     int death;
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class AnimationHandler : MonoBehaviour
         gunActive = Animator.StringToHash("GunActive");
         aim = Animator.StringToHash("Aim");
         crouch = Animator.StringToHash("Crouch");
+        wallKnock = Animator.StringToHash("WallKnock");
         death = Animator.StringToHash("Death");
     }
    
@@ -63,6 +65,11 @@ public class AnimationHandler : MonoBehaviour
     public void Crouch(bool crouched) 
     {
         animator.SetBool(crouch, crouched);
+    }
+
+    public void WallKnock()
+    {
+        animator.SetTrigger(wallKnock);
     }
 
     public void PlayDeath() 

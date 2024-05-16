@@ -127,15 +127,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SelectGun",
-                    "type": "Button",
-                    "id": "7bda9a6e-541f-4023-bf56-076e5862c654",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "WeaponWheel",
                     "type": "Button",
                     "id": "4b4e9087-1184-478f-aef6-0fe9fefa6a6a",
@@ -152,6 +143,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "WallKnock",
+                    "type": "Button",
+                    "id": "020df1ed-dcdd-4d69-97fd-9c0c66ef6498",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -163,17 +163,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "HugWall",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1f213896-2b50-4ffd-ad17-3ad5b6f1d691",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -196,6 +185,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d7dca57c-f7ac-412d-855e-4bdad88ac905",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallKnock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

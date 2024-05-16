@@ -37,12 +37,11 @@ public class PlayerInput : MonoBehaviour
             controls.PlayerActions.WeaponWheel.performed += inputActions => HandleWeaponWheel();
             controls.PlayerInput.Fire1.performed += inputActions => Fire1();
             controls.PlayerActions.Crouch.performed += inputActions => HandleCrouch();
+            controls.PlayerActions.WallKnock.performed += inputActions => HandleWallKnock();
         }
 
         controls.Enable();
     }
-
-
 
     private void Update()
     {
@@ -90,10 +89,15 @@ public class PlayerInput : MonoBehaviour
         {
             playerController.SetState(PlayerController.MyState.crouch);
         }
-        else 
+        else
         {
             playerController.SetState(PlayerController.MyState.normal);
         }
+    }
+
+    private void HandleWallKnock()
+    {
+        playerController.HandleWallKnock();
     }
 
     private void Fire1()
