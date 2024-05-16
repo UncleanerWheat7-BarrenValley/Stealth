@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static Destroy;
-using static FootPrint;
 
 public class BreadCrumb : MonoBehaviour
 {
@@ -13,11 +11,18 @@ public class BreadCrumb : MonoBehaviour
     Enemy enemyScript;
 
     public bool follow = false;
-    Vector3 destinationPos;
+    Vector3 destinationPos;    
 
     [SerializeField]
     public List<Vector3> followFootprintList = new List<Vector3>();
 
+    private void Start()
+    {
+        if(!FootprintManager.useFootprints) 
+        {
+            Destroy(this);
+        }
+    }
     public void AddFootprint(Vector3 footprint)
     {
         followFootprintList.Add(footprint);

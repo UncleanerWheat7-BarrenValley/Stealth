@@ -6941,6 +6941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8357f22b5502140b658fc6be50d81d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useFootprint: 1
   allFootprintList: []
   enemyList:
   - {fileID: 2122678995}

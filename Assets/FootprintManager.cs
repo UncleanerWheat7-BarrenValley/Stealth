@@ -1,30 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Destroy;
 using static FootPrint;
-using static UnityEngine.GraphicsBuffer;
 
 public class FootprintManager : MonoBehaviour
 {
+    public bool useFootprint;
     public List<Vector3> allFootprintList = new List<Vector3>();
     public List<GameObject> enemyList = new List<GameObject>();
 
+    public static bool useFootprints;
+
     private void OnEnable()
     {
-        footPlacement += AddFootprintToList;
-        footRemoval += DestroyOneFootprint;
+        useFootprints = useFootprint;
+        if (useFootprints)
+        {
+            footPlacement += AddFootprintToList;
+            footRemoval += DestroyOneFootprint;
+        }
     }
 
     private void OnDisable()
     {
-        footPlacement -= AddFootprintToList;
-        footRemoval -= DestroyOneFootprint;
+        if (useFootprints)
+        {
+            footPlacement -= AddFootprintToList;
+            footRemoval -= DestroyOneFootprint;
+        }
     }
 
     private void Start()
     {
-        StartCoroutine("FootprintCheck", 2);
+        if (useFootprints)
+        {
+            StartCoroutine("FootprintCheck", 2);
+        }
+
     }
 
     IEnumerator FootprintCheck(int waitTime)
