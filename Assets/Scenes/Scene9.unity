@@ -6861,6 +6861,10 @@ PrefabInstance:
       propertyPath: m_SelectedVertices.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7299672092032541951, guid: 55fa399011b80d84c8f4287cc91feef8, type: 3}
+      propertyPath: useFootprint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7905130918365013552, guid: 55fa399011b80d84c8f4287cc91feef8, type: 3}
       propertyPath: m_Name
       value: Plane
@@ -12220,7 +12224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5141091394348216485, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8977770858589289302, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
       propertyPath: followFootprintList.Array.size

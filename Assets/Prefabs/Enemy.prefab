@@ -276,7 +276,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4084872898782488542}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31a5faa515dbcf147b3a24179f80a01b, type: 3}
   m_Name: 
@@ -334,6 +334,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 21805652375653700}
   enemyScript: {fileID: 211795123776782343}
+  follow: 0
+  followFootprintList: []
 --- !u!1 &4398975242240878384
 GameObject:
   m_ObjectHideFlags: 0

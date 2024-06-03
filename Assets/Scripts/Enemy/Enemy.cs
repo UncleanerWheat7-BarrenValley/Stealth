@@ -194,7 +194,7 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 5)
         {
             Quaternion rotation = Quaternion.LookRotation(playerShadowTransformPosition - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1f);
+            transform.rotation = rotation;
         }
         else
         {
@@ -241,7 +241,7 @@ public class Enemy : MonoBehaviour
 
     void ShootSound(Vector3 gunshotLocation)
     {
-        if (Vector3.Distance(transform.position, gunshotLocation) < fov.fosValue)
+        if (Vector3.Distance(transform.position, gunshotLocation) < fov.fosValue && alertLevel < 10)
         {
             print("I heard that");
             alertLevel += 100 / Vector3.Distance(transform.position, gunshotLocation);

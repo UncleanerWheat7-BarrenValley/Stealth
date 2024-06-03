@@ -240,7 +240,6 @@ public class StateMachine
         public void EnterState()
         {
             enemyScript.ChangeLightColour(new Color(0, 1, 0, 0));
-
             enemyScript.Dead();
 
         }

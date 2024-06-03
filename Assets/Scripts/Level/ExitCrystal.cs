@@ -17,6 +17,13 @@ public class ExitCrystal : MonoBehaviour
     private IEnumerator Wait()
     {
         yield return new WaitForSeconds(2);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex + 1).Length > 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        else 
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
     }
 }

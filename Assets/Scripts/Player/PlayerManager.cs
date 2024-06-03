@@ -8,7 +8,7 @@ public class PlayerManager : MonoBehaviour, ICharacter
     public delegate void PlayerDeath();
     public static event PlayerDeath playerDied;
     public float moveSpeed { get; set; } = 5;
-    public int Health { get; set; } = 5;
+    public int Health { get; set; } = 5000;
 
     public void Damage(int damage)
     {
