@@ -7,7 +7,7 @@ public class StateMachine
 
     public void ChangeState(IStates newState)
     {
-        Debug.Log("Changing State");
+        ////Debug.log("Changing State");
         if (currentState != null)
         {
             currentState.ExitState();
@@ -60,7 +60,7 @@ public class StateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Idle state");
+            //Debug.log("Exit Idle state");
         }
     }
 
@@ -101,7 +101,7 @@ public class StateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Caution state");
+            //Debug.log("Exit Caution state");
         }
     }
 
@@ -139,7 +139,7 @@ public class StateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Caution state");
+            //Debug.log("Exit Caution state");
         }
     }
 
@@ -183,7 +183,7 @@ public class StateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Alert state");
+            //Debug.log("Exit Alert state");
         }
     }
 
@@ -199,7 +199,7 @@ public class StateMachine
         }
         public void EnterState()
         {
-            Debug.Log("Fire State");
+            //Debug.log("Fire State");
             enemyScript.ChangeLightColour(new Color(0.5f, 0.5f, 0, 0));
             enemyScript.UpdateMoveSpeed(0);
             enemyScript.FireGun(true);
@@ -222,7 +222,7 @@ public class StateMachine
         public void ExitState()
         {
             enemyScript.FireGun(false);
-            Debug.Log("Exit Fire state");
+            //Debug.log("Exit Fire state");
         }
     }
 
@@ -270,7 +270,7 @@ public class StateMachine
             enemyScript.ChangeLightColour(new Color(1, 0.25f, 0, 0));
             enemyScript.SetBreadCrumbGoal();
             enemyScript.UpdateMoveSpeed(0.3f);
-            Debug.Log("I Follow");
+            //Debug.log("I Follow");
         }
 
         public void ExecuteState()

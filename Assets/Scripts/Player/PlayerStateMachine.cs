@@ -6,7 +6,7 @@ public class PlayerStateMachine
 
     public void ChangeState(IStates newState)
     {
-        Debug.Log("Change State");
+        ////Debug.log("Change State");
         if (currentState != null)
         {
             currentState.ExitState();
@@ -35,7 +35,7 @@ public class PlayerStateMachine
 
         public void EnterState()
         {
-            Debug.Log("Enter Idle state");
+            //Debug.log("Enter Idle state");
             owner.GetComponentInChildren<Animator>().SetBool("WallHug", false);
         }
 
@@ -45,7 +45,7 @@ public class PlayerStateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Idle state");
+            //Debug.log("Exit Idle state");
         }
     }
 
@@ -63,7 +63,7 @@ public class PlayerStateMachine
 
         public void EnterState()
         {
-            Debug.Log("Enter Wall state");
+            //Debug.log("Enter Wall state");
             playerController.movementSpeed = 1;
             animator.SetBool("WallHug", true);
         }
@@ -75,7 +75,7 @@ public class PlayerStateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Idle state");
+            //Debug.log("Exit Idle state");
         }
     }
 
@@ -91,7 +91,7 @@ public class PlayerStateMachine
 
         public void EnterState()
         {
-            Debug.Log("Enter Crouch state");
+            //Debug.log("Enter Crouch state");
             playerController.movementSpeed = 2;
             playerController.Crouch(true);
         }
@@ -118,7 +118,7 @@ public class PlayerStateMachine
 
         public void EnterState()
         {
-            Debug.Log("Enter Aim state");            
+            //Debug.log("Enter Aim state");            
         }
 
         public void ExecuteState()
@@ -127,7 +127,7 @@ public class PlayerStateMachine
 
         public void ExitState()
         {
-            Debug.Log("Exit Aim state");
+            //Debug.log("Exit Aim state");
         }
     }
 

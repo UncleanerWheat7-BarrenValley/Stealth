@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -38,14 +39,17 @@ public class PlayerInput : MonoBehaviour
             controls.PlayerInput.Fire1.performed += inputActions => Fire1();
             controls.PlayerActions.Crouch.performed += inputActions => HandleCrouch();
             controls.PlayerActions.WallKnock.performed += inputActions => HandleWallKnock();
+
+            controls.WeaponWheel.WeaponSelect.performed += inputActions => HandleWeaponSelect(inputActions.ReadValue<Vector2>());
         }
 
         controls.Enable();
     }
 
+
+
     private void Update()
     {
-        Debug.LogWarning(weaponWheelFlag);
         if (!weaponWheelFlag)
         {
             TranslateInputMovement();
@@ -67,6 +71,7 @@ public class PlayerInput : MonoBehaviour
     {
         horizontalInput = movementInput.x;
         verticalInput = movementInput.y;
+
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
     }
     private void HandleEInput()
@@ -77,9 +82,21 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleWeaponWheel()
     {
-        print(weaponWheelFlag);
         weaponWheelFlag = !weaponWheelFlag;
-        playerController.OpenWeaponWheel();
+        playerController.ToggleWeaponWheel();
+    }
+
+    private void HandleWeaponSelect(Vector2 vector2Direction)
+    {
+        if (!weaponWheelFlag) return;
+        if (vector2Direction.x > 0 || vector2Direction.y < 0)
+        {
+            playerController.SelectedWeapon(1);
+        }
+        else if (vector2Direction.x < 0 || vector2Direction.y > 0)
+        {
+            playerController.SelectedWeapon(-1);
+        }
     }
 
     private void HandleCrouch()

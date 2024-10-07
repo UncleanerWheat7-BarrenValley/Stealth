@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Gun : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class Gun : MonoBehaviour
     private AudioClip gunFire;
     [SerializeField] 
     bool inaccurate;
+    [SerializeField]
+    GameObject GunPlacement;
 
     float randX = 0, randY = 0;
     public float randXEdge, randYEdge;
@@ -26,6 +30,8 @@ public class Gun : MonoBehaviour
 
     public void FireGun()
     {
+
+        bulletStartPoint = GetBulletStartPoint();
         audioSource.GetComponent<AudioSource>().clip = gunFire;
         audioSource.Play();
         shootSound(transform.position);
@@ -60,6 +66,22 @@ public class Gun : MonoBehaviour
                 }
             }
         }
+    }
+
+    private Transform GetBulletStartPoint()
+    {
+        GameObject thisGun = GunPlacement.transform.GetChild(0).transform.GetChild(0).gameObject;
+
+        foreach (Transform kid in thisGun.transform) 
+        {
+            if (kid.name == "Barrel") 
+            {
+                return kid;
+            }
+        }
+
+        Debug.LogError("Could not find gun barrel obj");
+        return null;
     }
 
     private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)

@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static PlayerStateMachine;
-using static WeaponWheelButtonController;
 public class PlayerController : MonoBehaviour
 {
     public MyState myState;
@@ -10,15 +10,18 @@ public class PlayerController : MonoBehaviour
     public GameObject model;
     public GameObject enemyToAimAt;
     public float movementSpeed;
+    public List<GameObject> weapons;
+    [SerializeField]
+    GameObject currentGun;
 
     [SerializeField]
-    GameObject gunObj;
+    GameObject gunPlacement;
     [SerializeField]
     AnimationHandler animationHandler;
     [SerializeField]
     CapsuleCollider collider;
     [SerializeField]
-    WeaponWheelController weaponWheelController;
+    GameObject weaponWheel;
 
     private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
@@ -26,20 +29,9 @@ public class PlayerController : MonoBehaviour
     Vector3 moveDirection;
     Vector3 normalVector;
     public LayerMask enemyLayerMask;
-    public bool gunB
-    {
-        get { return gunB; }
-        set
-        {
-            gunObj.SetActive(playerInput.gunFlag);
-        }
-    }
+    public WeaponController weaponController;
 
-    public int weaponSelected 
-    {
-        get { return weaponWheelController.weaponID; }
-        set { }
-    }
+    bool weaponSelect = false;
 
     public enum MyState
     {
@@ -52,7 +44,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main.transform;
         SetState(myState);
-        SelectedWeapon();
     }
     void Update()
     {
@@ -126,13 +117,13 @@ public class PlayerController : MonoBehaviour
 
         if (myState is not MyState.wall)
         {
-            moveDirection = mainCamera.forward * playerInput.verticalInput;
-            moveDirection += mainCamera.right * playerInput.horizontalInput;
+            moveDirection = new Vector3(mainCamera.forward.x, 0, mainCamera.forward.z).normalized * playerInput.verticalInput;
+            moveDirection += new Vector3(mainCamera.right.x, 0, mainCamera.right.z).normalized * playerInput.horizontalInput;
         }
         else
         {
             moveDirection = transform.right * -playerInput.horizontalInput;
-            Debug.DrawRay(transform.position + moveDirection * 1, transform.forward + Vector3.right * 0.5f * -1, UnityEngine.Color.red);
+            Debug.DrawRay(transform.position + moveDirection * 1, transform.forward + Vector3.right * 0.5f * -1, Color.red);
             if (!Physics.Raycast(transform.position + moveDirection / 3, transform.forward * -1 + Vector3.right * 0.5f, out RaycastHit hitInfo, 0.5f))
             {
                 moveDirection = Vector3.zero;
@@ -140,10 +131,12 @@ public class PlayerController : MonoBehaviour
         }
 
         moveDirection.y = 0;
+        float currentSpeed = movementSpeed * moveDirection.magnitude;
         moveDirection.Normalize();
-        moveDirection *= movementSpeed;
+        moveDirection *= currentSpeed;
 
         Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
+        print(projectedVelocity);
         GetComponent<Rigidbody>().velocity = projectedVelocity;
     }
 
@@ -212,27 +205,40 @@ public class PlayerController : MonoBehaviour
         this.enabled = false;
     }
 
-    internal void OpenWeaponWheel()
+    internal void ToggleWeaponWheel()
     {
-        weaponWheelController.OpenWeaponWheel();
+        if (weaponWheel.gameObject.activeSelf)
+        {
+            weaponWheel.SetActive(false);
+            weaponSelect = false;
+        }
+        else
+        {
+            weaponWheel.SetActive(true);
+            weaponSelect = true;
+        }
     }
 
     internal void CloseWeaponWheel()
     {
-        weaponWheelController.OpenWeaponWheel();
+        weaponWheel.SetActive(false);
     }
 
-    public void SelectedWeapon()
+    public void SelectedWeapon(int weaponInput)
     {
-        if (weaponSelected == 1)
+        weaponWheel.GetComponent<WeaponController>().ChangeSelectedGun(weaponInput);
+    }
+
+    public void ActivateGun(bool gunActive)
+    {
+        Destroy(currentGun);
+
+        playerInput.gunFlag = gunActive;
+        gunPlacement.SetActive(gunActive);
+
+        if (gunActive)
         {
-            playerInput.gunFlag = true;
-            gunB = true;
-        }
-        else
-        {
-            playerInput.gunFlag = false;
-            gunB = false;
+            currentGun = Instantiate(weapons[weaponController.currentGun], gunPlacement.transform.position, gunPlacement.transform.rotation, gunPlacement.transform);
         }
     }
 
@@ -242,13 +248,13 @@ public class PlayerController : MonoBehaviour
 
         if (crouched)
         {
-            collider.height = 0.9f;
-            collider.center = new Vector3(0, 0.5f, 0);
+            collider.height = 1f;
+            collider.center = new Vector3(0, 0.55f, 0);
         }
-        else 
+        else
         {
-            collider.height = 1.8f;
-            collider.center = new Vector3(0, 0.9f, 0);
+            collider.height = 1.6f;
+            collider.center = new Vector3(0, 0.75f, 0);
         }
     }
 

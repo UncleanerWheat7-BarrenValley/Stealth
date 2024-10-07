@@ -73,8 +73,7 @@ public class Enemy : MonoBehaviour
     }
 
     private void Update()
-    {
-        print(stateMachine.currentState);
+    {        
         currentMoveSpeed = navMeshAgent.velocity.magnitude / topSpeed;//for animation speed
         stateMachine.Update();
     }
@@ -149,8 +148,7 @@ public class Enemy : MonoBehaviour
             GetComponent<NavMeshAgent>().destination = patrol.patrolTransforms[patrol.currentWaypoint].position;
         }
         else
-        {
-            print("I am here ");
+        {            
             if (patrolTimer > 0)
             {
                 patrolTimer -= Time.deltaTime;
@@ -243,7 +241,6 @@ public class Enemy : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, gunshotLocation) < fov.fosValue && alertLevel < 10)
         {
-            print("I heard that");
             alertLevel += 100 / Vector3.Distance(transform.position, gunshotLocation);
             SetState(MyState.caution);
             Investigate();
