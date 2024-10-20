@@ -15,14 +15,7 @@ public class BreadCrumb : MonoBehaviour
 
     [SerializeField]
     public List<Vector3> followFootprintList = new List<Vector3>();
-
-    private void Start()
-    {
-        if(!FootprintManager.useFootprints) 
-        {
-            Destroy(this);
-        }
-    }
+        
     public void AddFootprint(Vector3 footprint)
     {
         followFootprintList.Add(footprint);

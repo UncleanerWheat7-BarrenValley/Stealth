@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController2 : MonoBehaviour
 {
     PlayerInput playerInput;
-    public Transform target;  // the target the camera is orbiting around
+    Transform target;
 
     private float currentX = 0.0f;
     private float currentY = 0.0f;
@@ -19,11 +19,12 @@ public class CameraController2 : MonoBehaviour
     float r;
     void Start()
     {
+        target = GameObject.Find("Player").transform;
         transform.position = target.position + cameraNaturalPos;
     }
 
     void FixedUpdate()
-    {        
+    {
         lineCastStartPos = (target.position + Vector3.up * 0.5f) + cameraNaturalPos;
         if (Physics.Linecast(lineCastStartPos, target.position + Vector3.up * 1, out RaycastHit hitInfo))
         {
@@ -34,9 +35,9 @@ public class CameraController2 : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, target.position + cameraNaturalPos, 20 * Time.fixedDeltaTime);
                 //transform.position = target.position + cameraNaturalPos;
                 float Angle = Mathf.SmoothDampAngle(transform.eulerAngles.x, cameraNaturalRot.x, ref r, 0.1f);
-                transform.rotation = Quaternion.Euler(Angle,0,0);
+                transform.rotation = Quaternion.Euler(Angle, 0, 0);
             }
-            else 
+            else
             {
                 transform.position = Vector3.MoveTowards(transform.position, target.position + cameraOverlookPos, 20 * Time.fixedDeltaTime);
                 //transform.position = target.position + cameraOverlookPos;

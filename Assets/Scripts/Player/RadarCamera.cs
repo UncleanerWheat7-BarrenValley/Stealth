@@ -4,6 +4,17 @@ public class RadarCamera : MonoBehaviour
 {
     [SerializeField]
     GameObject player;
+
+    private void Start()
+    {
+        if (player == null) 
+        {
+            player = GameObject.Find("Player");
+        }
+    }
+
+
+
     // Update is called once per frame
     void LateUpdate()
     {

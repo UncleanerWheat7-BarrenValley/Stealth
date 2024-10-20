@@ -13,9 +13,13 @@ public class ButtonClick : MonoBehaviour
         }
         else if (input == 1)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
         else if (input == 2)
+        {
+            SceneManager.LoadScene(2);
+        }
+        else if (input == 3)
         {
             Application.Quit();
         }

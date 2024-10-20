@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Wall
   - Enemy
+  - Concrete
+  - Water
+  - Snow
   layers:
   - Default
   - TransparentFX
@@ -15,8 +18,8 @@ TagManager:
   - UI
   - Enemy
   - Radar
-  - 
-  - 
+  - Volume
+  - Ground
   - 
   - 
   - 

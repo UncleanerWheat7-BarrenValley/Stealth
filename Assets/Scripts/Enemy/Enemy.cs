@@ -68,6 +68,13 @@ public class Enemy : MonoBehaviour
     {
         topSpeed = navMeshAgent.speed;
         SetState(myState);
+
+        if (playerTransform == null) 
+        {
+            playerTransform = GameObject.Find("Player").transform;
+        }
+
+
         playerShadowTransformPosition = playerTransform.position;
         patrolTimer = patrol.waypointWaitTime;
     }
