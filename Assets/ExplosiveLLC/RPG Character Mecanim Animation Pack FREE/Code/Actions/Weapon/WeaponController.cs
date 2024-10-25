@@ -23,7 +23,7 @@ public class WeaponController : MonoBehaviour
 
     private void OnEnable()
     {
-        Utilities.PauseGame();
+        Utilities.PauseGameplay();
     }
 
     private void OnDisable()

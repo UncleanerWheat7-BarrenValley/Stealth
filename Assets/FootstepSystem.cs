@@ -35,6 +35,7 @@ public class FootstepSystem : MonoBehaviour
                 PlayFootstepSound(Water);
                 ToggleFootprint(true);
                 StartCoroutine(FootprintTimer());
+                hit.transform.GetComponent<Puddle>().WaterAnnounce();
             }
             else if (hit.collider.CompareTag("Snow"))
             {

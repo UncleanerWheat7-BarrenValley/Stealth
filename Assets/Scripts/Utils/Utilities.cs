@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class Utilities
 {
-    public static void PauseGame()
+    public static void PauseGameplay()
     {
         Time.timeScale = 0;
     }

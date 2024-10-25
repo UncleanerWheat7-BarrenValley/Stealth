@@ -6,6 +6,8 @@ public class PlayerInput : MonoBehaviour
 {
     [SerializeField]
     PlayerController playerController;
+    [SerializeField]
+    UIController uiController;
     Controls controls;
     public CameraController cameraController;
     Vector2 movementInput;
@@ -36,6 +38,9 @@ public class PlayerInput : MonoBehaviour
 
             controls.PlayerActions.HugWall.performed += i => HandleEInput();
             controls.PlayerActions.WeaponWheel.performed += inputActions => HandleWeaponWheel();
+
+            controls.PlayerInput.Pause.performed += InputActions => HandlePause();
+
             controls.PlayerInput.Fire1.performed += inputActions => Fire1();
             controls.PlayerActions.Crouch.performed += inputActions => HandleCrouch();
             controls.PlayerActions.WallKnock.performed += inputActions => HandleWallKnock();
@@ -89,11 +94,11 @@ public class PlayerInput : MonoBehaviour
     private void HandleWeaponSelect(Vector2 vector2Direction)
     {
         if (!weaponWheelFlag) return;
-        if (vector2Direction.x > 0 || vector2Direction.y < 0)
+        if (vector2Direction.x == 1 || vector2Direction.y == -1)
         {
             playerController.SelectedWeapon(1);
         }
-        else if (vector2Direction.x < 0 || vector2Direction.y > 0)
+        else if (vector2Direction.x == -1 || vector2Direction.y == 1)
         {
             playerController.SelectedWeapon(-1);
         }
@@ -110,6 +115,11 @@ public class PlayerInput : MonoBehaviour
         {
             playerController.SetState(PlayerController.MyState.normal);
         }
+    }
+
+    private void HandlePause() 
+    {
+        uiController.OpenPauseMenu();
     }
 
     private void HandleWallKnock()

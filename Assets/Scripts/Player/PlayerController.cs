@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static PlayerStateMachine;
+using static UnityEngine.GraphicsBuffer;
 public class PlayerController : MonoBehaviour
 {
     public MyState myState;
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerStateMachine playerStateMachine = new PlayerStateMachine();
     PlayerInput playerInput;
-    Transform mainCamera;
+    GameObject mainCamera;
     Vector3 moveDirection;
     Vector3 normalVector;
     public LayerMask enemyLayerMask;
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
-        mainCamera = Camera.main.transform;
+        mainCamera = Camera.main.gameObject;
         SetState(myState);
     }
     void Update()
@@ -117,8 +118,8 @@ public class PlayerController : MonoBehaviour
 
         if (myState is not MyState.wall)
         {
-            moveDirection = new Vector3(mainCamera.forward.x, 0, mainCamera.forward.z).normalized * playerInput.verticalInput;
-            moveDirection += new Vector3(mainCamera.right.x, 0, mainCamera.right.z).normalized * playerInput.horizontalInput;
+            moveDirection = new Vector3(mainCamera.transform.forward.x, 0, mainCamera.transform.forward.z).normalized * playerInput.verticalInput;
+            moveDirection += new Vector3(mainCamera.transform.right.x, 0, mainCamera.transform.right.z).normalized * playerInput.horizontalInput;
         }
         else
         {
@@ -144,7 +145,7 @@ public class PlayerController : MonoBehaviour
     {
         if (myState is MyState.wall) return;
 
-        Vector3 targetDir = (mainCamera.forward * playerInput.verticalInput) + (mainCamera.right * playerInput.horizontalInput);
+        Vector3 targetDir = (mainCamera.transform.forward * playerInput.verticalInput) + (mainCamera.transform.right * playerInput.horizontalInput);
         targetDir.y = 0;
         targetDir.Normalize();
 
@@ -269,5 +270,22 @@ public class PlayerController : MonoBehaviour
 
         animationHandler.WallKnock();
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "CameraSwitch")
+        {
+            print("CameraSwitchIn");
+            mainCamera.GetComponent<CameraController2>().SetCameraTarget(other.transform.Find("CameraStealPos").position);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "CameraSwitch")
+        {
+            mainCamera.GetComponent<CameraController2>().ResetCameraTarget();
+        }
     }
 }

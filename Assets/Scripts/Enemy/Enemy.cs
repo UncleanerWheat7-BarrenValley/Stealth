@@ -3,6 +3,7 @@ using static StateMachine;
 using UnityEngine.AI;
 using System.Collections;
 using System.Threading.Tasks;
+using static Puddle;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
@@ -51,17 +52,23 @@ public class Enemy : MonoBehaviour
     private void OnEnable()
     {
         PlayerManager.playerDied += playerDied;
-        Gun.shootSound += ShootSound;
         Laser.laserPlayerDetected += Alarm;
-        WallKnock.knockSound += ShootSound;
+
+        //Sounds to investigate
+        Gun.shootSound += InvestigateSound;
+        Puddle.puddleSound += InvestigateSound;
+        WallKnock.knockSound += InvestigateSound;
     }
 
     private void OnDisable()
     {
         PlayerManager.playerDied -= playerDied;
-        Gun.shootSound -= ShootSound;
         Laser.laserPlayerDetected -= Alarm;
-        WallKnock.knockSound -= ShootSound;
+
+        //Sounds to investigate
+        Gun.shootSound -= InvestigateSound;
+        Puddle.puddleSound -= InvestigateSound;
+        WallKnock.knockSound -= InvestigateSound;
     }
 
     void Start()
@@ -228,7 +235,7 @@ public class Enemy : MonoBehaviour
     private void DisableSelf()
     {
         PlayerManager.playerDied -= playerDied;
-        Gun.shootSound -= ShootSound;
+        Gun.shootSound -= InvestigateSound;
         Laser.laserPlayerDetected -= Alarm;
 
         fov.enabled = false;
@@ -244,11 +251,11 @@ public class Enemy : MonoBehaviour
         SetState(MyState.idle);
     }
 
-    void ShootSound(Vector3 gunshotLocation)
+    void InvestigateSound(Vector3 soundLocation)
     {
-        if (Vector3.Distance(transform.position, gunshotLocation) < fov.fosValue && alertLevel < 10)
+        if (Vector3.Distance(transform.position, soundLocation) < fov.fosValue && alertLevel < 10)
         {
-            alertLevel += 100 / Vector3.Distance(transform.position, gunshotLocation);
+            alertLevel += 100 / Vector3.Distance(transform.position, soundLocation);
             SetState(MyState.caution);
             Investigate();
         }
