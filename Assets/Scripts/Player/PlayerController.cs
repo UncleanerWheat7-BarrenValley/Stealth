@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
+using UnityEngine.SocialPlatforms;
 using static PlayerStateMachine;
 using static UnityEngine.GraphicsBuffer;
 public class PlayerController : MonoBehaviour
 {
     public MyState myState;
     public Rigidbody rb;
+    public CharacterController characterController;
     public GameObject model;
     public GameObject enemyToAimAt;
     public float movementSpeed;
@@ -43,15 +46,28 @@ public class PlayerController : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
         mainCamera = Camera.main.gameObject;
         SetState(myState);
     }
-    void Update()
+    void FixedUpdate()
     {
         float tick = Time.deltaTime;
         ApplyInputMovement();
         HandlePlayerRotation(tick);
         playerStateMachine.Update();
+        SnapToTerrain();
+    }
+
+    public LayerMask LayerMask;
+    RaycastHit hit;
+    private void SnapToTerrain()
+    {
+        Debug.DrawRay(transform.position + Vector3.up * 1, transform.up * -2, Color.red);
+        if (Physics.Raycast(transform.position + Vector3.up * 1, transform.up * -1, out hit, 2f, LayerMask))
+        {
+            transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+        }
     }
 
     public void SetState(MyState newState)
@@ -136,9 +152,10 @@ public class PlayerController : MonoBehaviour
         moveDirection.Normalize();
         moveDirection *= currentSpeed;
 
-        Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
+        Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector) + Vector3.down * 1f;
         print(projectedVelocity);
-        GetComponent<Rigidbody>().velocity = projectedVelocity;
+        //GetComponent<Rigidbody>().velocity = projectedVelocity;
+        GetComponent<CharacterController>().Move(projectedVelocity * Time.deltaTime);
     }
 
     private void HandlePlayerRotation(float tick)

@@ -18,7 +18,7 @@ public class FootstepSystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawRay(rayStart.position, rayStart.transform.up * range * -1, Color.red);
+        //Debug.DrawRay(rayStart.position, rayStart.transform.up * range * -1, Color.red);
     }
 
     public void Footstep(float volume)
@@ -55,7 +55,7 @@ public class FootstepSystem : MonoBehaviour
         FootprintManager.useFootprints = active;
     }
 
-    IEnumerator FootprintTimer() 
+    IEnumerator FootprintTimer()
     {
         yield return new WaitForSeconds(10);
 
