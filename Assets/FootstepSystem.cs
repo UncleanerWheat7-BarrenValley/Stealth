@@ -15,6 +15,7 @@ public class FootstepSystem : MonoBehaviour
     Transform rayStart;
     float range = 0.5f;
     public LayerMask LayerMask;
+    bool coroutineRunning = false;
 
     private void Update()
     {
@@ -29,6 +30,10 @@ public class FootstepSystem : MonoBehaviour
             if (hit.collider.CompareTag("Concrete"))
             {
                 PlayFootstepSound(Concrete);
+                if (!coroutineRunning)
+                {
+                    ToggleFootprint(false);
+                }
             }
             else if (hit.collider.CompareTag("Water"))
             {
@@ -57,8 +62,10 @@ public class FootstepSystem : MonoBehaviour
 
     IEnumerator FootprintTimer()
     {
+        coroutineRunning = true;
         yield return new WaitForSeconds(10);
 
         ToggleFootprint(false);
+        coroutineRunning = false;
     }
 }
