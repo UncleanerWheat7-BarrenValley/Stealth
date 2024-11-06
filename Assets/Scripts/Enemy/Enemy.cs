@@ -190,7 +190,7 @@ public class Enemy : MonoBehaviour
     {
         navMeshAgent.destination = playerShadowTransformPosition;
 
-        if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 3 && fov.PlayerInFOV())
+        if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 3 && fov.PlayerInFOVBool())
         {
             SetState(MyState.fire);
         }
@@ -203,7 +203,7 @@ public class Enemy : MonoBehaviour
 
     public void AimAtPlayer()
     {
-        if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 5)
+        if (Vector3.Distance(playerShadowTransformPosition, transform.position) < 5 && fov.PlayerInFOVBool())
         {
             Quaternion rotation = Quaternion.LookRotation(playerShadowTransformPosition - transform.position);
             transform.rotation = rotation;
@@ -279,7 +279,7 @@ public class Enemy : MonoBehaviour
     {
         while (alertLevel > 0)
         {
-            if (fov.PlayerInFOV())
+            if (fov.PlayerInFOVBool())
             {
                 break;
             }

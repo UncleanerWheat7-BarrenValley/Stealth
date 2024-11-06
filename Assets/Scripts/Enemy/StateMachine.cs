@@ -166,7 +166,7 @@ public class StateMachine
             enemyScript.UpdatePlayerShadow();
             enemyScript.MoveToPlayer();
 
-            if (!enemyScript.fov.PlayerInFOV())
+            if (!enemyScript.fov.PlayerInFOVBool())
             {
                 if (timer > 0)
                 {

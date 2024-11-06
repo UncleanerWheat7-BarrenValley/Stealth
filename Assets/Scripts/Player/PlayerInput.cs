@@ -13,6 +13,7 @@ public class PlayerInput : MonoBehaviour
     Vector2 movementInput;
     Vector2 cameraInput;
 
+
     public bool eInput = false;
     public bool twoInput = false;
     public bool wallHugFlag;
@@ -117,7 +118,7 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    private void HandlePause() 
+    private void HandlePause()
     {
         uiController.OpenPauseMenu();
     }

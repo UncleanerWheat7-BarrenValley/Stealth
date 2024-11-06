@@ -43,7 +43,7 @@ public class FOV : MonoBehaviour
             );
     }
 
-    public bool PlayerInFOV()
+    public bool PlayerInFOVBool()
     {
         return playerInFOV;
     }

@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
         normal, crouch, wall, aim, dead
     }
 
+
+    public CodecCalls codecCalls;
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -49,6 +51,15 @@ public class PlayerController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         mainCamera = Camera.main.gameObject;
         SetState(myState);
+
+
+        string[] dialogue = {
+            "Snake, do you read me?",
+            "Loud and clear, Colonel.",
+            "You have to infiltrate the base without being detected."
+        };
+
+        codecCalls.StartCodecConversation(dialogue);
     }
     void FixedUpdate()
     {
