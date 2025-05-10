@@ -866,6 +866,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &400235970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6170072914728847485, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+  m_PrefabInstance: {fileID: 604269489}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &404038259 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 512019958874871264, guid: 55fa399011b80d84c8f4287cc91feef8, type: 3}
@@ -1434,6 +1439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8889114453869747280, guid: 809810e937366e34cbbba02558dc5e77, type: 3}
+      propertyPath: GunPlacement
+      value: 
+      objectReference: {fileID: 400235970}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

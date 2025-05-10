@@ -1498,7 +1498,7 @@ MonoBehaviour:
   audioSource: {fileID: 770600030245121901}
   gunFire: {fileID: 8300000, guid: dbdd5b1fdc59d014fb47cced6676a122, type: 3}
   inaccurate: 1
-  GunPlacement: {fileID: 0}
+  GunPlacement: {fileID: 6170072914728847485}
   randXEdge: 0.2
   randYEdge: 0.2
   tagToHit: Player
@@ -1602,5 +1602,10 @@ AudioSource:
 --- !u!4 &4577795394345574427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}
+  m_PrefabInstance: {fileID: 4038921640889698288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6170072914728847485 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1320221589979902067, guid: 6e488d5906d88da4ca410e12d4b1146f, type: 3}
   m_PrefabInstance: {fileID: 4038921640889698288}
   m_PrefabAsset: {fileID: 0}
