@@ -53,13 +53,13 @@ public class PlayerController : MonoBehaviour
         SetState(myState);
 
 
-        string[] dialogue = {
-            "Snake, do you read me?",
-            "Loud and clear, Colonel.",
-            "You have to infiltrate the base without being detected."
-        };
+        //string[] dialogue = {
+        //    "Snake, do you read me?",
+        //    "Loud and clear, Colonel.",
+        //    "You have to infiltrate the base without being detected."
+        //};
 
-        codecCalls.StartCodecConversation(dialogue);
+        //codecCalls.StartCodecConversation(dialogue);
     }
     void FixedUpdate()
     {
@@ -151,8 +151,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             moveDirection = transform.right * -playerInput.horizontalInput;
-            Debug.DrawRay(transform.position + moveDirection * 1, transform.forward + Vector3.right * 0.5f * -1, Color.red);
-            if (!Physics.Raycast(transform.position + moveDirection / 3, transform.forward * -1 + Vector3.right * 0.5f, out RaycastHit hitInfo, 0.5f))
+            Debug.DrawRay(transform.position + moveDirection / 2, transform.forward * -1, Color.red);
+            if (!Physics.Raycast(transform.position + moveDirection / 2, transform.forward * -1, out RaycastHit hitInfo, 0.5f))
             {
                 moveDirection = Vector3.zero;
             }
