@@ -24,7 +24,8 @@ public class CameraController2 : MonoBehaviour
     float r;
     void Start()
     {
-        playerTarget = GameObject.Find("Player").transform;
+        playerTarget = transform.parent;
+        transform.parent = null;
         ResetCameraTarget();
     }
 

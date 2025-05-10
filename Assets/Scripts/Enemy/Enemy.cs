@@ -51,6 +51,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerSpawn.OnPlayerSpawn += OnPlayerSpawned;
         PlayerManager.playerDied += playerDied;
         Laser.laserPlayerDetected += Alarm;
 
@@ -60,8 +61,15 @@ public class Enemy : MonoBehaviour
         WallKnock.knockSound += InvestigateSound;
     }
 
+    private void OnPlayerSpawned(Transform player)
+    {
+        playerTransform = player;
+        playerShadowTransformPosition = playerTransform.position;
+    }
+
     private void OnDisable()
     {
+        PlayerSpawn.OnPlayerSpawn -= OnPlayerSpawned;
         PlayerManager.playerDied -= playerDied;
         Laser.laserPlayerDetected -= Alarm;
 
@@ -75,19 +83,11 @@ public class Enemy : MonoBehaviour
     {
         topSpeed = navMeshAgent.speed;
         SetState(myState);
-
-        if (playerTransform == null) 
-        {
-            playerTransform = GameObject.Find("Player").transform;
-        }
-
-
-        playerShadowTransformPosition = playerTransform.position;
         patrolTimer = patrol.waypointWaitTime;
     }
 
     private void Update()
-    {        
+    {
         currentMoveSpeed = navMeshAgent.velocity.magnitude / topSpeed;//for animation speed
         stateMachine.Update();
     }
@@ -162,7 +162,7 @@ public class Enemy : MonoBehaviour
             GetComponent<NavMeshAgent>().destination = patrol.patrolTransforms[patrol.currentWaypoint].position;
         }
         else
-        {            
+        {
             if (patrolTimer > 0)
             {
                 patrolTimer -= Time.deltaTime;

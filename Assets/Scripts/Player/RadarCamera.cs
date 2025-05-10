@@ -9,7 +9,8 @@ public class RadarCamera : MonoBehaviour
     {
         if (player == null) 
         {
-            player = GameObject.Find("Player");
+            player = transform.parent.gameObject;
+            transform.parent = null;
         }
     }
 
